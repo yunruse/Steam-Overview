@@ -23,7 +23,7 @@ function updateLibraries(){
     library.significantGames = [];
     
     /* Quasi-random but tied to size for constancy */
-    var hue = Math.sin(library.sizeTotal / 1000) * 360;
+    var hue = Math.sin(library.sizeUsed / 1000) * 360;
     
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
@@ -77,9 +77,8 @@ function loadLibraries(){
     library.title = el.getElementsByClassName('title')[0];
     library.bar = el.getElementsByClassName('drivebar')[0];
     
-    var list = el.getElementsByTagName('ul')[0];
-    
-    var leftWidth = 0;
+    var list = el.getElementsByTagName('ul')[0],
+        leftWidth = 0;
     
     for( j = 0; j < library.games.length; j++ ){
       var game = library.games[j],
