@@ -77,6 +77,12 @@ ol, ul {
 .barsegment.used {
   background-color: hsl(210, 70%, 50%);
 }
+.barsegment.selected {
+  background-color: hsl(120, 70%, 70%);
+}
+.barsegment.selected.tooMuch {
+  background-color: hsl(0, 70%, 70%);
+}
 .barsegment.games {
   background-color: hsl(270, 70%, 50%);
   height: 90%;
@@ -113,12 +119,18 @@ ol, ul {
 .gamelist li.meta {
   font-weight: bold;
 }
-.gamelist li:not(.meta):nth-child(even) {
+.gamelist li:not(.meta):not(.locked):nth-child(even) {
   background-color: #444;
 }
-.gamelist li:not(.meta):hover {
+.gamelist li:not(.meta):not(.locked):hover{
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
+  color: white;
+}
+
+.gamelist li.locked {
+  padding-left: 40px;
+  background-color: hsl(340, 50%, 30%);
   color: white;
 }
 

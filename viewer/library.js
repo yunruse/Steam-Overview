@@ -27,9 +27,12 @@ function updateLibraries(){
     
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
+      game.library = library;
       game.percentTaken = (100 * (game.size / library.sizeTotal)).round(2);
       if( game.percentTaken > 1 ){ library.significantGames.push(game) }
+      
       game.formattedSize = formatBytes(game.size, 1, true);
+      
       game.colour = "hsl(" + hue + ", 100%, 70%";
       hue += 360 / library.games.length;
       hue %= 360;
@@ -43,7 +46,7 @@ var libraryConstructor = '\
     <div class="drivebar">Free\
       <div class="barsegment used"  style="width: $usedPercent$%;">Used</div>\
       <div class="barsegment games" style="width: $gamePercent$%;">All games</div>\
-      <div class="barsegment selected" style="width: 0%;"></div>\
+      <div class="barsegment selected" style="width: 0%; left: $usedPercent$%;"></div>\
     </div>\
   </div>\
 </div></div>\
@@ -72,10 +75,10 @@ function loadLibraries(){
       '$usedPercent$', usedPercent,
       '$gamePercent$', gamePercent);
     
-    library.selected = el.getElementsByClassName('selected')[0];
     library.box = el.getElementsByClassName('titlebox')[0];
     library.title = el.getElementsByClassName('title')[0];
     library.bar = el.getElementsByClassName('drivebar')[0];
+    library.selected = el.getElementsByClassName('selected')[0];
     
     var list = el.getElementsByTagName('ul')[0],
         leftWidth = 0;
@@ -85,6 +88,7 @@ function loadLibraries(){
           li = game.element = document.createElement('li');
       li.onmouseover = gameover;
       li.onmouseout = gameout;
+      li.onclick = gameclick;
       
       li.innerHTML = gameConstructor.replaceAll(
         '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentTaken,
@@ -108,22 +112,59 @@ function loadLibraries(){
   }
 }
 
-gameover = function(){ gameSelect(this, true) }
-gameout = function(){ gameSelect(this, false) }
+gameover  = function(){ gameSelect(this, true, false) }
+gameout   = function(){ gameSelect(this, false, false) }
+gameclick = function(){ gameSelect(this, true, true) }
 
-function gameSelect(element, doSelect){
-  var library, game;
-  for( i = 0; i < libraries.length; i++ ) {
-    var l = libraries[i];
-    for( j = 0; j < l.games.length; j++ ){
-      var g = l.games[j];
-      if( element.innerText.beginsWith(g.name) ){
-        library = l;
-        game = g;
-        break;
+var selectedGame = false;
+
+function gameSelect(element, highlight, lock){
+  var library;
+  if( !lock && selectedGame ){ return; }
+  if( arguments.length == 4 ){
+    library = element;
+  } else {
+    for( i = 0; i < libraries.length; i++ ) {
+      var lib = libraries[i];
+      for( j = 0; j < lib.games.length; j++ ){
+        var ga = lib.games[j];
+        if( element.innerText.beginsWith(ga.name) ){
+          library = lib;
+          game = ga;
+          break;
+        }
       }
     }
   }
+  if( lock ){
+    if( selectedGame == game ){
+      highlight = false;
+      selectedGame = false;
+      game.element.classList.remove('locked')
+    } else {
+      if( selectedGame ){
+        gameHighlight(selectedGame.library, selectedGame, false)
+        selectedGame.element.classList.remove('locked');
+      }
+      selectedGame = game;
+      game.element.classList.add('locked')
+    }
+  }
+  gameHighlight(library, game, highlight)
+}
+
+function gameHighlight(library, game, highlight){
   var c = game.bar.classList;
-  doSelect ? c.add('hovered') : c.remove('hovered');
+  highlight ? c.add('hovered') : c.remove('hovered');
+  for( i = 0; i < libraries.length; i++ ) {
+    var lib = libraries[i], percent;
+    if( !highlight || lib == library ){
+      percent = 0;
+    } else if( game.size > library.sizeFree ){
+      percent = library.sizeFree / library.sizeTotal
+    } else {
+      percent = game.size / library.sizeTotal;
+    }
+    lib.selected.style.width = percent * 100 + "%";
+  }
 }
