@@ -67,6 +67,7 @@ ol, ul {
   color: white;
   overflow: hidden;
   transition: width 0.2s;
+  height: 100%;
 }
 
 .barsegment::after, .drivebar::after {
@@ -75,7 +76,6 @@ ol, ul {
 
 .barsegment.used {
   background-color: hsl(210, 70%, 50%);
-  height: 95%;
 }
 .barsegment.games {
   background-color: hsl(270, 70%, 50%);
@@ -83,7 +83,6 @@ ol, ul {
 }
 
 .barsegment.part {
-  top: 0%;
   height: 15%;
   transition: height 0.5s;
 }
