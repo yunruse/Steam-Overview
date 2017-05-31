@@ -23,7 +23,7 @@ function updateLibraries(){
     library.significantGames = [];
     
     /* Quasi-random but tied to size for constancy */
-    var hue = Math.sin(library.sizeUsed / 1000) * 360;
+    var hue = (library.sizeUsed % 1000) * (360 / 1000);
     
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
