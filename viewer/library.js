@@ -8,8 +8,8 @@ window.onload = function(){
   loadLibraries();
   
   var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved;
-  if( timeSince > 10 * 60 ){
-    /* More than 10 minutes, use warning */
+  if( timeSince > 30 * 60 ){
+    /* More than 30 minutes, use warning */
     timeDisplay.parentElement.classList.remove('hidden');
     timeDisplay.innerText = formatTimeDelta(timeSince);
   }
