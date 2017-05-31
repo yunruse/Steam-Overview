@@ -121,21 +121,19 @@ var selectedGame = false;
 function gameSelect(element, highlight, lock){
   var library;
   if( !lock && selectedGame ){ return; }
-  if( arguments.length == 4 ){
-    library = element;
-  } else {
-    for( i = 0; i < libraries.length; i++ ) {
-      var lib = libraries[i];
-      for( j = 0; j < lib.games.length; j++ ){
-        var ga = lib.games[j];
-        if( element.innerText.beginsWith(ga.name) ){
-          library = lib;
-          game = ga;
-          break;
-        }
+  
+  for( i = 0; i < libraries.length; i++ ) {
+    var lib = libraries[i];
+    for( j = 0; j < lib.games.length; j++ ){
+      var ga = lib.games[j];
+      if( element.innerText.beginsWith(ga.name) ){
+        library = lib;
+        game = ga;
+        break;
       }
     }
   }
+  
   if( lock ){
     if( selectedGame == game ){
       highlight = false;
@@ -143,27 +141,30 @@ function gameSelect(element, highlight, lock){
       game.element.classList.remove('locked')
     } else {
       if( selectedGame ){
-        gameHighlight(selectedGame.library, selectedGame, false)
+        gameHighlight(selectedGame, false)
         selectedGame.element.classList.remove('locked');
       }
       selectedGame = game;
       game.element.classList.add('locked')
     }
   }
-  gameHighlight(library, game, highlight)
+  gameHighlight(game, highlight)
 }
 
-function gameHighlight(library, game, highlight){
+function gameHighlight(game, highlight) {
   var c = game.bar.classList;
   highlight ? c.add('hovered') : c.remove('hovered');
+  
   for( i = 0; i < libraries.length; i++ ) {
     var lib = libraries[i], percent;
-    if( !highlight || lib == library ){
+    lib.selected.classList.remove('tooMuch')
+    if( !highlight || lib == game.library ){
       percent = 0;
-    } else if( game.size > library.sizeFree ){
-      percent = library.sizeFree / library.sizeTotal
+    } else if( game.size > lib.sizeFree ){
+      percent = lib.sizeFree / lib.sizeTotal;
+      lib.selected.classList.add('tooMuch');
     } else {
-      percent = game.size / library.sizeTotal;
+      percent = game.size / lib.sizeTotal;
     }
     lib.selected.style.width = percent * 100 + "%";
   }
