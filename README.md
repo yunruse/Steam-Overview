@@ -1,5 +1,5 @@
 # Steam Overview
-![A screenshot of Steam Overview open in the browser.](https://i.imgur.com/9PeGdkI.png)
+![A screenshot of Steam Overview open in the browser.](animation.gif)
 
 A toolkit for easy overview of your Steam games and how much space in your drive they take.
 
