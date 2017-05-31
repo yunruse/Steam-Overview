@@ -81,9 +81,18 @@ ol, ul {
   background-color: hsl(270, 70%, 50%);
   height: 90%;
 }
-.barsegment.selected {
-  background-color: hsl(300, 70%, 50%);
-  height: 80%;
+
+.barsegment.part {
+  top: 0%;
+  height: 15%;
+  transition: height 0.5s;
+}
+.barsegment.part.hovered {
+  height: 90%; 
+}
+
+.drivebar.hasgame .barsegment.part{
+  height: 0%;
 }
 
 .gamelist {

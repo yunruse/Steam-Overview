@@ -20,10 +20,19 @@ function updateLibraries(){
     var library = libraries[i];
     library.sizeFree = library.sizeTotal - library.sizeUsed;
     library.games.sort(function(a, b){return b.size - a.size})
+    library.significantGames = [];
+    
+    /* Quasi-random but tied to size for constancy */
+    var hue = Math.sin(library.sizeTotal / 1000) * 360;
+    
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
       game.percentTaken = (100 * (game.size / library.sizeTotal)).round(2);
+      if( game.percentTaken > 1 ){ library.significantGames.push(game) }
       game.formattedSize = formatBytes(game.size, 1, true);
+      game.colour = "hsl(" + hue + ", 100%, 70%";
+      hue += 360 / library.games.length;
+      hue %= 360;
     }
   }
 }
@@ -44,7 +53,7 @@ var libraryConstructor = '\
 <li class="meta games">All Games <span class="gamesize">$usedGames$, $gamePercent$%<span>\
 </li></ul>'
 
-var gameConstructor = "$name$ <span class='gamesize'>$size$, $percent$%</span>"
+var gameConstructor = "$name$ <span style='color: $colour$' class='gamesize'>$size$, $percent$%</span>"
 
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
@@ -66,19 +75,34 @@ function loadLibraries(){
     library.selected = el.getElementsByClassName('selected')[0];
     library.box = el.getElementsByClassName('titlebox')[0];
     library.title = el.getElementsByClassName('title')[0];
+    library.bar = el.getElementsByClassName('drivebar')[0];
+    
     var list = el.getElementsByTagName('ul')[0];
+    
+    var leftWidth = 0;
     
     for( j = 0; j < library.games.length; j++ ){
       var game = library.games[j],
-          li =  game.element = document.createElement('li');
+          li = game.element = document.createElement('li');
       li.onmouseover = gameover;
       li.onmouseout = gameout;
       
       li.innerHTML = gameConstructor.replaceAll(
-        '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentTaken)
+        '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentTaken,
+        '$colour$', game.colour)
       
       list.appendChild(game.element)
       game.element = li;
+    
+      var bar = document.createElement('span');
+      bar.className = "barsegment part";
+      bar.style.width = game.percentTaken + "%";
+      bar.style.left = leftWidth + "%";
+      bar.style.backgroundColor = game.colour;
+      leftWidth += game.percentTaken;
+      
+      library.bar.appendChild(bar);
+      game.bar = bar;
     }
     libraryList.appendChild(el);
     library.element = el;
@@ -101,10 +125,6 @@ function gameSelect(element, doSelect){
       }
     }
   }
-  if( doSelect ){
-    library.selected.innerText = game.name;
-    library.selected.style.width = game.percentTaken + "%";
-  } else {
-    library.selected.style.width = "0%";
-  }
+  var c = game.bar.classList;
+  doSelect ? c.add('hovered') : c.remove('hovered');
 }
