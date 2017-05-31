@@ -67,11 +67,7 @@ function formatBytes(size, digits, binary) {
  */
 function formatTimeDelta(duration){
   var hour = 3600, day = hour * 24, week = day * 7;
-  if( duration < 60 ){
-    return 'less than a minute';
-  } else if( duration < 120 ){
-    return 'a minute';
-  } else if( duration < hour ){
+  if( duration < hour ){
     return (duration / 60).round(0) + ' minutes';
   } else if( duration < 70 * 60 ){
     return 'an hour';
