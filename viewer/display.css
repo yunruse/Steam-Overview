@@ -1,0 +1,132 @@
+body {
+  background-color: #222;
+  color: #ddd;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+#title, #titleimage {
+  margin-top: 20px;
+  margin-left: 30px;
+  height: 80px;
+  display: inline;
+}
+
+h1 {
+  font-weight: lighter;
+  font-size: 4em;
+}
+
+h2 {
+  font-size: 2em;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+#timeWarning { color: #f88; }
+
+.hidden { display: none !important; }
+
+ol, ul {
+  list-style-type: none;
+}
+
+.title, .titlebox {
+  display: block;
+  height: 5em;
+  background-color: #333;
+}
+
+.drivebar { top: -20px; }
+
+.drivebar, .barsegment {
+  height: 32px;
+  font-weight: bold;
+  text-align: right;
+  vertical-align: bottom;
+}
+
+.drivebar {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #eee;
+  position: relative;
+  color: #222;
+}
+
+.fixed {
+  top: 0;
+  z-index: 8;
+  width: 100%;
+  position: fixed !important;
+}
+
+.barsegment {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  overflow: hidden;
+  transition: width 0.2s;
+}
+
+.barsegment::after, .drivebar::after {
+  content: "  ";
+}
+
+.barsegment.used {
+  background-color: hsl(210, 70%, 50%);
+  height: 95%;
+}
+.barsegment.games {
+  background-color: hsl(270, 70%, 50%);
+  height: 90%;
+}
+.barsegment.selected {
+  background-color: hsl(300, 70%, 50%);
+  height: 80%;
+}
+
+.gamelist {
+  list-style: none;
+  padding-left: 0;
+  width: 100%;
+}
+
+.gamelist li {
+  font-size: 20px;
+  padding-left: 10px;
+  background-color: #555;
+  transition: padding-left 0.5s, background-color 0.5s, color 0.5s;
+}
+.gamelist li.free { background-color: #555; }
+.gamelist li.used { background-color: hsl(210, 50%, 30%); }
+.gamelist li.games { background-color: hsl(270, 50%, 30%); }
+
+.gamelist li.meta {
+  font-weight: bold;
+}
+.gamelist li:not(.meta):nth-child(even) {
+  background-color: #444;
+}
+.gamelist li:not(.meta):hover {
+  padding-left: 20px;
+  background-color: hsl(300, 50%, 30%);
+  color: white;
+}
+
+.gamesize {
+  position: absolute;
+  left: 50%
+}
+
+#info h2 {
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: -0.5em;
+}
+#infoImage {
+  position: absolute;
+  right: 0;
+  height: 100%;
+}

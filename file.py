@@ -1,0 +1,69 @@
+'''Path and file functions.'''
+
+import sys
+import os
+import re
+
+# Path functions
+
+def _fixpath(path):
+    '''Fix path to internal format.'''
+    path = path.replace('\\', '/')
+    path = re.sub(r'(^|/)\./', '', path)
+    return path
+
+def relpath(path, start=''):
+    if start == path:
+        return ''
+    else:
+        return path(os.path.relpath(path, start))
+
+def path(path, *paths):
+    path = _fixpath(path)
+    if paths:
+        path = os.path.join(path, *paths)
+    if os.path.isabs(path):
+        # If not relative, fix out any '..'
+        path = os.path.abspath(path)
+    return _fixpath(path)
+
+# File sizes
+
+def dirsize(path):
+    '''Get bytes used by directory and amount of files.
+    
+    > dirsize('/path/to/directory/')
+    (134240, 27)
+    > dirsize('/path/to/file.txt')
+    (5836, 1)
+    > dirsize('notanactualfile')
+    (0, 0)'''
+    
+    if not os.path.exists(path):
+        return 0, 0
+    elif os.path.isfile(path):
+        try:
+            return os.lstat(path).st_size, 1
+        except os.error:
+            return 0, 1
+    
+    totalSize = 0
+    seen = set()
+    
+    for dirpath, dirs, files in os.walk(path):
+        for file in files:
+            file = os.path.join(dirpath, file)
+            
+            try:
+                stat = os.lstat(file)
+            except os.error:
+                continue
+            
+            if stat.st_ino in seen:
+                continue
+            else:
+                seen.add(stat.st_ino)
+            
+            totalSize += stat.st_size
+    
+    return totalSize, len(seen)
