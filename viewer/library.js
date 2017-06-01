@@ -53,17 +53,29 @@ var libraryConstructor = '\
   </div>\
 </div></div>\
 <ul class="gamelist">\
-<li class="meta free">Free <span class="gamesize">$free$<span>\
-<li class="meta used">Used <span class="gamesize">$used$, $usedPercent$%<span>\
-<li class="meta games">All Games <span class="gamesize">$usedGames$, $gamePercent$%<span>\
+<li class="meta free">Free\
+  <span class="gamesize">$free$</span>\
+  <span class="gamePercent">$freePercent$%</span>\
+</li>\
+<li class="meta used">Used\
+  <span class="gamesize">$used$</span>\
+  <span class="gamePercent">$usedPercent$%</span>\
+</li>\
+<li class="meta games">All Games\
+  <span class="gamesize">$usedGames$</span>\
+  <spaan class="gamePercent">$gamePercent$%</span>\
 </li></ul>'
 
-var gameConstructor = "$name$ <span style='color: $colour$' class='gamesize'>$size$, $percent$%</span>"
+var gameConstructor = "\
+$name$\
+<span style='color: $colour$' class='gamesize'>$size$</span>\
+<span style='color: $colour$' class='gamePercent'>$percent$%</span>"
 
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
     var library = libraries[i];
     var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2),
+        freePercent = (100 * (library.sizeFree / library.sizeTotal)).round(2),
         gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2),
         title = library.path + ' (' + formatBytes(library.sizeTotal, 1) + ', ' +
           library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
@@ -74,6 +86,7 @@ function loadLibraries(){
       '$free$', formatBytes(library.sizeFree, 1),
       '$used$', formatBytes(library.sizeUsed, 1),
       '$usedGames$', formatBytes(library.sizeGames, 1),
+      '$freePercent$', freePercent,
       '$usedPercent$', usedPercent,
       '$gamePercent$', gamePercent);
     

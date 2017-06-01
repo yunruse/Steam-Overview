@@ -138,6 +138,10 @@ ol, ul {
   position: absolute;
   left: 50%
 }
+.gamePercent {
+  position: absolute;
+  left: 70%
+}
 
 #info h2 {
   display: block;
