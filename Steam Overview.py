@@ -58,16 +58,19 @@ for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
         i = file.path(os.environ[i], 'Steam')
         _BASEPATHS.add(i)
 
-def getLibraryPaths():
+def getLibraryPaths(base=None):
     '''Returns a list of library paths found, of which the first is the base.'''
     
-    for base in _BASEPATHS:
-        if isSteamBase(base):
-            break
-    else:
+    if base is None:
+        for base in _BASEPATHS:
+            if isSteamBase(base):
+                break
+        else:
+            return []
+    try:
+        paths = [base] + readSteamFile(file.path(base, 'steamapps', 'libraryfolders.vdf'))['_list']
+    except FileNotFoundError:
         return []
-
-    paths = [base] + readSteamFile(file.path(base, 'steamapps', 'libraryfolders.vdf'))['_list']
     return [file.path(i) for i in paths]
 
 class Game:
@@ -118,9 +121,6 @@ class Library(list):
         return {'path': self.path, 'sizeTotal': self.sizeTotal, 'sizeUsed': self.sizeUsed,
                 'sizeGames': self.sizeGames, 'games': [game.toDictionary() for game in self]}
 
-def getLibraries():
-    return [Library(path) for path in getLibraryPaths()]
-
 FORMAT = '''\
 /* Steam Overview data
  * Log:
@@ -139,13 +139,32 @@ def main():
     
     log('Getting paths...')
     libraries = []
-    paths = getLibraryPaths()
-    for path in paths:
-        log('Getting games at {}...'.format(path))
-        lib = Library(path)
-        if len(lib):
-            libraries.append(lib.toDictionary())
-        log('{} found.'.format(len(lib)))
+    def getLibraries(paths):
+        for path in paths:
+            log('Getting games at {}...'.format(path))
+            lib = Library(path)
+            if len(lib):
+                libraries.append(lib.toDictionary())
+            log('{} found.'.format(len(lib)))
+    
+    getLibraries(getLibraryPaths())
+    
+    incorrect = 0
+    while len(libraries) == 0:
+        if incorrect > 2:
+            print("Are you sure you have Steam installed? Please check you have a")
+            input("libraryfolders.vdf at your path. Exiting...")
+            exit()
+        elif incorrect == 0:
+            print("Sorry, but Steam Overview couldn't find your Steam install path.")
+            print("Please type your Steam install path (containing executable).")
+        else:
+            print("Nope, sorry, I couldn't find any Steam path there. Try again:")
+        incorrect += 1
+        
+        base = input("~ ")
+        getLibraries(getLibraryPaths(base))
+    
     log('Done, dumping to `libraries.js`…')
 
     with open('libraries.js', 'w') as f:
