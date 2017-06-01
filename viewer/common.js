@@ -87,11 +87,13 @@ function formatTimeDelta(duration){
  * For a fixed-digit string, use Number.toFixed().
  * @param {Number} places - the amount of digits maximum to use after the decimal point.
  */
-Number.prototype.round = function(places){
+Number.prototype.round = function(places, asString){
+  if( arguments.length < 2 ){ asString = false; }
   var places = (arguments.length == 0 || places < 0)
                ? 1 : Math.round(  Math.min(Math.max(places, 0), 20)  ),
       factor = Math.pow(10, places),
       integer = Math.floor(this),
-      floating = this - integer;
-  return integer + Math.round(floating * factor) / factor;
+      floating = Math.round((this - integer) * factor) / factor;
+  if( asString ){ floating = floating.toString().substring(1, places + 2); }
+  return integer + floating;
 }

@@ -28,7 +28,8 @@ function updateLibraries(){
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
       game.library = library;
-      game.percentTaken = (100 * (game.size / library.sizeTotal)).round(2);
+      game.percentTaken = (100 * (game.size / library.sizeTotal));
+      game.percentString = game.percentTaken.round(2, true);
       if( game.percentTaken > 1 ){ library.significantGames.push(game) }
       
       game.formattedSize = formatBytes(game.size, 1, true);
@@ -61,8 +62,8 @@ var gameConstructor = "$name$ <span style='color: $colour$' class='gamesize'>$si
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
     var library = libraries[i];
-    var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2),
-        gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2),
+    var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2, true),
+        gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2, true),
         title = library.path + ' (' + formatBytes(library.sizeTotal, 1) + ', ' +
           library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
         el = document.createElement('li');
@@ -91,7 +92,7 @@ function loadLibraries(){
       li.onclick = gameclick;
       
       li.innerHTML = gameConstructor.replaceAll(
-        '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentTaken,
+        '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentString,
         '$colour$', game.colour)
       
       list.appendChild(game.element)
