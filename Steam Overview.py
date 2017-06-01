@@ -45,12 +45,18 @@ def readSteamFile(path):
                 info[key] = value
     return info
 
-_BASEPATHS = (
-    'C:\Program Files\Steam\\', 'C:\Program Files (x86)\Steam\\',
+# Unix-like directories to check
+_BASEPATHS = {
     os.path.expanduser('~/Library/Application Support/Steam/'),
     os.path.expanduser('~/.steam/'), os.path.expanduser('~/.local/share/Steam'),
     '/'
-)
+}
+
+# Windows directories
+for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
+    if i in os.environ:
+        i = file.path(os.environ[i], 'Steam')
+        _BASEPATHS.add(i)
 
 def getLibraryPaths():
     '''Returns a list of library paths found, of which the first is the base.'''
