@@ -11,6 +11,25 @@ body {
   display: inline;
 }
 
+a {
+  color: #ddd;
+  text-decoration: none;
+  transition: color 0.1s;
+}
+
+a:hover{
+  color: #ffa74e;
+}
+
+#titleimage {
+  transition: transform 1s, filter 1s;
+}
+
+a:hover #titleimage {
+  filter: hue-rotate(-160deg);
+  transform: rotate(360deg);
+}
+
 h1 {
   font-weight: lighter;
   font-size: 4em;
