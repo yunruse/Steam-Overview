@@ -29,8 +29,9 @@ function updateLibraries(){
       var game = library.games[j];
       game.library = library;
       game.percentTaken = (100 * (game.size / library.sizeTotal));
-      game.percentString = game.percentTaken.round(2, true);
       if( game.percentTaken > 1 ){ library.significantGames.push(game) }
+      game.percentString = game.percentTaken.round(2);
+      if( game.percentString == "0" ){ game.percentString = "< 0.01"; }
       
       game.formattedSize = formatBytes(game.size, 1, true);
       
