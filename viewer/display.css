@@ -22,7 +22,7 @@ h2 {
   font-weight: lighter;
 }
 
-#timeWarning { color: #f88; }
+#errorDisplay { color: #f88; }
 
 .hidden { display: none !important; }
 

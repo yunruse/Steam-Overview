@@ -2,17 +2,23 @@ var libraryList, timeDisplay;
 
 window.onload = function(){
   libraryList = document.getElementById('drives');
-  timeDisplay = document.getElementById('timeSince');
+  errorDisplay = document.getElementById('errorDisplay');
+  try{ libraries } catch(e) { libraries = false; }
   
-  updateLibraries();
-  loadLibraries();
-  
-  var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved;
-  if( timeSince > 30 * 60 ){
-    /* More than 30 minutes, use warning */
-    timeDisplay.parentElement.classList.remove('hidden');
-    timeDisplay.innerText = formatTimeDelta(timeSince);
+  if( libraries ){
+    updateLibraries();
+    loadLibraries();
+    var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved;
+    if( timeSince > 30 * 60 ){
+      /* More than 30 minutes, use warning */
+      errorDisplay.classList.remove('hidden');
+      errorDisplay.innerText = 'Warning! It has been ' + formatTimeDelta(timeSince) + ' since last update.';
+    }
+  } else {
+    errorDisplay.classList.remove('hidden');
+    errorDisplay.innerText = "I couldn't find a libraries.js file. Did you run `Steam Overview.py`?"
   }
+  
 }
 
 function updateLibraries(){
