@@ -115,24 +115,43 @@ class Library(list):
 def getLibraries():
     return [Library(path) for path in getLibraryPaths()]
 
-if __name__ == '__main__':
-    print('Getting paths...')
+FORMAT = '''\
+/* Steam Overview data
+ * Log:
+ * {}
+ */
+
+var lastRetrieved = {},
+    libraries = {};'''
+
+def main():
+    logtxt = []
+    def log(text):
+        text = time.strftime('%H:%M:%S ') + text
+        print(text)
+        logtxt.append(text)
+    
+    log('Getting paths...')
     libraries = []
     paths = getLibraryPaths()
     for path in paths:
-        print('Getting games at {}...'.format(path))
+        log('Getting games at {}...'.format(path))
         lib = Library(path)
         if len(lib):
             libraries.append(lib.toDictionary())
-        print('{} found.'.format(len(lib)))
-    print('Done, dumping to `libraries.json`…')
+        log('{} found.'.format(len(lib)))
+    log('Done, dumping to `libraries.json`…')
 
-    import time
     with open('libraries.json', 'w') as f:
-        f.write('var lastRetrieved = {}, libraries = {}'.format(
-            time.time(), json.dumps(libraries, indent=1)))
+        f.write(FORMAT.format(
+            '\n * '.join(logtxt), time.time(),
+            json.dumps(libraries, indent=1)))
 
-    print('Opening `viewer/viewer.html`…')
-    import webbrowser
+    log('Opening `viewer/viewer.html`…')
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)
+
+if __name__ == '__main__':
+    import time
+    import webbrowser
+    main()
