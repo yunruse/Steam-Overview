@@ -140,9 +140,9 @@ def main():
         if len(lib):
             libraries.append(lib.toDictionary())
         log('{} found.'.format(len(lib)))
-    log('Done, dumping to `libraries.json`…')
+    log('Done, dumping to `libraries.js`…')
 
-    with open('libraries.json', 'w') as f:
+    with open('libraries.js', 'w') as f:
         f.write(FORMAT.format(
             '\n * '.join(logtxt), time.time(),
             json.dumps(libraries, indent=1)))
