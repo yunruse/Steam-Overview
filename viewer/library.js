@@ -62,8 +62,8 @@ var gameConstructor = "$name$ <span style='color: $colour$' class='gamesize'>$si
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
     var library = libraries[i];
-    var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2, true),
-        gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2, true),
+    var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2),
+        gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2),
         title = library.path + ' (' + formatBytes(library.sizeTotal, 1) + ', ' +
           library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
         el = document.createElement('li');

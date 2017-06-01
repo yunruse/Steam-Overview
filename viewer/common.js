@@ -83,17 +83,22 @@ function formatTimeDelta(duration){
 /* Number functions */
 
 /**
- * Floating-point round.
+ * Floating-point round to string.
  * For a fixed-digit string, use Number.toFixed().
  * @param {Number} places - the amount of digits maximum to use after the decimal point.
+ * @param {Boolean} asNumber - set to true to return a number (which may have floating point errors.)
  */
-Number.prototype.round = function(places, asString){
-  if( arguments.length < 2 ){ asString = false; }
-  var places = (arguments.length == 0 || places < 0)
-               ? 1 : Math.round(  Math.min(Math.max(places, 0), 20)  ),
+Number.prototype.round = function(places, asNumber){
+  if( arguments.length < 2 ){ asNumber = false; }
+  
+  var integer = Math.floor(this);
+  if( places < 1 ){ return asNumber ? integer : integer.toString(); }  
+  
+  var places = (arguments.length == 0)
+               ? 1 : Math.min(Math.floor(places), 20),
       factor = Math.pow(10, places),
-      integer = Math.floor(this),
-      floating = Math.round((this - integer) * factor) / factor;
-  if( asString ){ floating = floating.toString().substring(1, places + 2); }
-  return integer + floating;
+      floating = Math.round((this - integer) * factor) / factor,
+      number = integer + floating.toString().substring(1, places + 2);
+  if( asNumber ){ return parseFloat(number) }
+  return number
 }
