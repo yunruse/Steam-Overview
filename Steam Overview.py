@@ -146,7 +146,9 @@ def main():
             lib = Library(path)
             if len(lib):
                 libraries.append(lib.toDictionary())
-            log('{} found.'.format(len(lib)))
+                log('{} found.'.format(len(lib)))
+            else:
+                log('No games found, ignoring.')
     
     getLibraries(getLibraryPaths())
     
@@ -175,6 +177,10 @@ def main():
     
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)
+
+    print('This log is available at the head of `libraries.js` for reference.')
+    print('Exiting in 5 seconds...')
+    time.sleep(5)
 
 if __name__ == '__main__':
     import time
