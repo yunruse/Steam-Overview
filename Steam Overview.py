@@ -8,21 +8,13 @@ import file
 __dir__ = ['isSteamLibrary', 'isSteamPath', 'getLibraryPaths', 'Game', 'Library', 'getLibraries']
 
 def isSteamLibrary(path):
-    '''Return True if the path is a valid Steam library.
+    '''Return True if the path is a valid Steam library, containing /steamapps/common/'''
     
-    A valid Steam library contains a 'steamapps' directory, which itself contains a 'file'
-    directory. As an empty library may not contain ACF files, and different OSes contain
-    different files to indicate they are libraries, it is impossible pathto completely validate
-    a library.'''
-    
-    steamapps = file.path(path, 'steamapps')
+    steamapps = file.path(path, 'steamapps', 'common')
     return os.path.isdir(steamapps)
 
 def isSteamBase(path):
-    '''Return True if the path is a base Steam library. Implies isSteamLibrary(path) is True.
-    
-    A base Steam library is that which contains a 'libraryfolders.vdf' file in its /steamapps/.
-    This is useful as it contains a list of other user libraries.'''
+    '''Return True if the path is a base Steam library, containing /steamapps/libraryfolders.vdf'''
     
     path = file.path(path)
     folders = file.path(path, 'steamapps', 'libraryfolders.vdf')
@@ -67,10 +59,12 @@ def getLibraryPaths(base=None):
                 break
         else:
             return []
+    
     try:
         paths = [base] + readSteamFile(file.path(base, 'steamapps', 'libraryfolders.vdf'))['_list']
     except FileNotFoundError:
         return []
+    
     return [file.path(i) for i in paths]
 
 class Game:
