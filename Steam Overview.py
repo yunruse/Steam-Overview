@@ -74,16 +74,14 @@ def getLibraryPaths(base=None):
     return [file.path(i) for i in paths]
 
 class Game:
-    __slots__ = ['id', 'directory', 'name', 'steamLastUpdate', 'size']
+    __slots__ = ['directory', 'name', 'size']
     
     def __init__(self, path):
         '''Game, given path to ACF reference.'''
         info = readSteamFile(path)
         
-        self.id = info.get('appid', None)
         self.directory = info.get('installdir', None)
         self.name = info.get('name', self.directory)
-        self.steamLastUpdate = info.get('LastUpdated', 0)
         self.size = int(info.get('SizeOnDisk', 0))
     
         if self.directory:
