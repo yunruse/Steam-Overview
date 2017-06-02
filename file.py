@@ -2,6 +2,7 @@
 
 import sys
 import os
+import collections
 import re
 
 # Path functions
@@ -29,6 +30,7 @@ def path(path, *paths):
 
 # File sizes
 
+size = collections.namedtuple('size', 'totalSize fileCount')
 def dirsize(path):
     '''Get bytes used by directory and amount of files.
     
@@ -66,4 +68,4 @@ def dirsize(path):
             
             totalSize += stat.st_size
     
-    return totalSize, len(seen)
+    return size(totalSize, len(seen))
