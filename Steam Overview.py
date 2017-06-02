@@ -166,14 +166,13 @@ def main():
         base = input("~ ")
         getLibraries(getLibraryPaths(base))
     
-    log('Done, dumping to `libraries.js`…')
+    log('Done, dumping to `libraries.js` and opening `viewer/viewer.html`...')
     
     with open('libraries.js', 'w') as f:
         f.write(FORMAT.format(
             '\n * '.join(logtxt), time.time(),
             json.dumps(libraries, indent=1)))
     
-    log('Opening `viewer/viewer.html`…')
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)
 
