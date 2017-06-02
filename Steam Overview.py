@@ -78,11 +78,8 @@ class Game:
         self.name = info.get('name', self.directory)
         self.size = int(info.get('SizeOnDisk', 0))
     
-        if self.directory:
-            gamepath = file.path(os.path.split(path)[0], 'common', self.directory)
-            self.size = file.dirsize(gamepath)[0]
-        else:
-            self.path = self.actualSize = None
+        gamepath = file.path(os.path.split(path)[0], 'common', self.directory)
+        self.size = file.dirsize(gamepath)[0]
     
     def toDictionary(self):
         return {key: getattr(self, key, None) for key in self.__slots__}
