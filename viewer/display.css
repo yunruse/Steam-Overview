@@ -142,8 +142,8 @@ ol, ul { list-style-type: none; }
 
 .col1, .col2 { position: absolute; }
 
-.col1 { left: 50%; }
-.col2 { left: 70%; }
+.col1 { left: calc(90% - 6.5em); }
+.col2 { left: calc(100% - 4.5em); }
 }
 }
 
