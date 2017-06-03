@@ -42,12 +42,9 @@ h2 {
 }
 
 #errorDisplay { color: #f88; }
-
 .hidden { display: none !important; }
 
-ol, ul {
-  list-style-type: none;
-}
+ol, ul { list-style-type: none; }
 
 
 .header { background-color: #333; }
@@ -80,7 +77,7 @@ ol, ul {
 }
 
 .barsegment::after, .drivebar::after {
-  content: "  ";
+  content: "  "
 }
 
 .barsegment.used {
@@ -115,41 +112,39 @@ ol, ul {
   width: 100%;
 }
 
-.gamelist li {
+.item {
   font-size: 20px;
   padding-left: 10px;
   background-color: #555;
   transition: padding-left 0.5s, background-color 0.5s, color 0.5s;
 }
-.gamelist li.free { background-color: #555; }
-.gamelist li.used { background-color: hsl(210, 50%, 30%); }
-.gamelist li.games { background-color: hsl(270, 50%, 30%); }
 
-.gamelist li.meta {
-  font-weight: bold;
-}
-.gamelist li:not(.meta):not(.locked):nth-child(even) {
+.item.meta { font-weight: bold; }
+
+.item.free { background-color: #555; }
+.item.used { background-color: hsl(210, 50%, 30%); }
+.item.allGames { background-color: hsl(270, 50%, 30%); }
+
+.item:not(.meta):not(.locked):nth-child(even) {
   background-color: #444;
 }
-.gamelist li:not(.meta):not(.locked):hover{
+.item:not(.meta):not(.locked):hover {
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
   color: white;
 }
 
-.gamelist li.locked {
+.item.locked {
   padding-left: 40px;
   background-color: hsl(340, 50%, 30%);
   color: white;
 }
 
-.gamesize {
-  position: absolute;
-  left: 50%
+.col1, .col2 { position: absolute; }
+
+.col1 { left: 50%; }
+.col2 { left: 70%; }
 }
-.gamePercent {
-  position: absolute;
-  left: 70%
 }
 
 #info h2 {

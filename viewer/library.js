@@ -49,33 +49,32 @@ function updateLibraries(){
 }
 
 var libraryConstructor = '\
-<div class="titlebox"><div class="title">\
+<div class="header">\
   <h2 class="drivename">$title$</h2>\
-    <div class="drivebar">Free\
-      <div class="barsegment used"  style="width: $usedPercent$%;">Used</div>\
-      <div class="barsegment games" style="width: $gamePercent$%;">All games</div>\
-      <div class="barsegment selected" style="width: 0%; left: $usedPercent$%;"></div>\
-    </div>\
+  <div class="drivebar">Free\
+    <div class="barsegment used"  style="width: $usedPercent$%;">Used</div>\
+    <div class="barsegment games" style="width: $gamePercent$%;">All games</div>\
+    <div class="barsegment withSelected" style="width: 0%; left: $usedPercent$%;"></div>\
   </div>\
-</div></div>\
+</div>\
 <ul class="gamelist">\
-<li class="meta free">Free\
-  <span class="gamesize">$free$</span>\
-  <span class="gamePercent">$freePercent$%</span>\
+<li class="item meta free">Free\
+  <span class="col1">$free$</span>\
+  <span class="col2">$freePercent$%</span>\
 </li>\
-<li class="meta used">Used\
-  <span class="gamesize">$used$</span>\
-  <span class="gamePercent">$usedPercent$%</span>\
+<li class="item meta used">Used\
+  <span class="col1">$used$</span>\
+  <span class="col2">$usedPercent$%</span>\
 </li>\
-<li class="meta games">All Games\
-  <span class="gamesize">$usedGames$</span>\
-  <spaan class="gamePercent">$gamePercent$%</span>\
+<li class="item meta allGames">All Games\
+  <span class="col1">$usedGames$</span>\
+  <span class="col2">$gamePercent$%</span>\
 </li></ul>'
 
 var gameConstructor = "\
 $name$\
-<span style='color: $colour$' class='gamesize'>$size$</span>\
-<span style='color: $colour$' class='gamePercent'>$percent$%</span>"
+<span style='color: $colour$' class='col1'>$size$</span>\
+<span style='color: $colour$' class='col2'>$percent$%</span>\
 
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
@@ -97,7 +96,7 @@ function loadLibraries(){
       '$gamePercent$', gamePercent);
     
     library.bar = el.getElementsByClassName('drivebar')[0];
-    library.selected = el.getElementsByClassName('selected')[0];
+    library.withSelected = el.getElementsByClassName('withSelected')[0];
     
     var list = el.getElementsByTagName('ul')[0],
         leftWidth = 0;
@@ -105,6 +104,9 @@ function loadLibraries(){
     for( j = 0; j < library.games.length; j++ ){
       var game = library.games[j],
           li = game.element = document.createElement('li');
+      
+      li.classList = 'item';
+      
       li.onmouseover = gameover;
       li.onmouseout = gameout;
       li.onclick = gameclick;
@@ -176,15 +178,15 @@ function gameHighlight(game, highlight) {
   
   for( i = 0; i < libraries.length; i++ ) {
     var lib = libraries[i], percent;
-    lib.selected.classList.remove('tooMuch')
+    lib.withSelected.classList.remove('tooMuch')
     if( !highlight || lib == game.library ){
       percent = 0;
     } else if( game.size > lib.sizeFree ){
       percent = lib.sizeFree / lib.sizeTotal;
-      lib.selected.classList.add('tooMuch');
+      lib.withSelected.classList.add('tooMuch');
     } else {
       percent = game.size / lib.sizeTotal;
     }
-    lib.selected.style.width = percent * 100 + "%";
+    lib.withSelected.style.width = percent * 100 + "%";
   }
 }
