@@ -112,23 +112,23 @@ ol, ul { list-style-type: none; }
   width: 100%;
 }
 
-.item {
+.item, .meta {
   font-size: 20px;
   padding-left: 10px;
   background-color: #555;
   transition: padding-left 0.5s, background-color 0.5s, color 0.5s;
 }
 
-.item.meta { font-weight: bold; }
+.meta { font-weight: bold; }
 
-.item.free { background-color: #555; }
-.item.used { background-color: hsl(210, 50%, 30%); }
-.item.allGames { background-color: hsl(270, 50%, 30%); }
+.meta.free { background-color: #555; }
+.meta.used { background-color: hsl(210, 50%, 30%); }
+.meta.allGames { background-color: hsl(270, 50%, 30%); }
 
-.item:not(.meta):not(.locked):nth-child(even) {
+.item:not(.locked):nth-child(even) {
   background-color: #444;
 }
-.item:not(.meta):not(.locked):hover {
+.item:not(.locked):hover {
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
   color: white;

@@ -58,15 +58,15 @@ var libraryConstructor = '\
   </div>\
 </div>\
 <ul class="gamelist">\
-<li class="item meta free">Free\
+<li class="meta free">Free\
   <span class="col1">$free$</span>\
   <span class="col2">$freePercent$%</span>\
 </li>\
-<li class="item meta used">Used\
+<li class="meta used">Used\
   <span class="col1">$used$</span>\
   <span class="col2">$usedPercent$%</span>\
 </li>\
-<li class="item meta allGames">All Games\
+<li class="meta allGames">All Games\
   <span class="col1">$usedGames$</span>\
   <span class="col2">$gamePercent$%</span>\
 </li></ul>'
