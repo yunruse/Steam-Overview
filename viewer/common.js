@@ -60,26 +60,6 @@ function formatBytes(size, digits, binary) {
   return size.round(digits) + " " + prefix + "B";
 }
 
-/**
- * Returns the length of time in human time units to the nearest unit.
- * Uses 'less than a minute', 'X minutes', 'more than X hours' and 'X days'.
- * @param {Number} duration - the duration in seconds.
- */
-function formatTimeDelta(duration){
-  var hour = 3600, day = hour * 24, week = day * 7;
-  if( duration < hour ){
-    return (duration / 60).round(0) + ' minutes';
-  } else if( duration < 70 * 60 ){
-    return 'an hour';
-  } else if( duration < day ){
-    return 'more than ' + (duration / hour).round(0) + ' hours'
-  } else if( duration < week ){
-    return (duration / day).round(0) + ' days'
-  } else {
-    return (duration / week).round(0) + ' weeks'
-  }
-}
-
 /* Number functions */
 
 /**

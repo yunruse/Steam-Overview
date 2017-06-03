@@ -12,7 +12,7 @@ window.onload = function(){
     if( timeSince > 30 * 60 ){
       /* More than 30 minutes, use warning */
       errorDisplay.classList.remove('hidden');
-      errorDisplay.innerText = 'Warning! It has been ' + formatTimeDelta(timeSince) + ' since last update.';
+      errorDisplay.innerText = 'It has been more than 30 minutes since scanned – please rerun `Steam Overview.py`.';
     }
   } else {
     errorDisplay.classList.remove('hidden');
