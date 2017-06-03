@@ -144,7 +144,16 @@ ol, ul { list-style-type: none; }
 
 .col1 { left: calc(90% - 6.5em); }
 .col2 { left: calc(100% - 4.5em); }
+
+.playLink {
+  position: relative;
+  left: 30px;
+  opacity: 0;
+  transition: opacity 0.5s, left 0.5s;
 }
+.item:hover .playLink {
+  opacity: 1;
+  left: 10px;
 }
 
 #info h2 {

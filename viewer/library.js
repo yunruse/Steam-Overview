@@ -73,6 +73,7 @@ var libraryConstructor = '\
 
 var gameConstructor = "\
 $name$\
+<span class='playLink'><a href='steam://run/$id$'>Play...</a></span>\
 <span style='color: $colour$' class='col1'>$size$</span>\
 <span style='color: $colour$' class='col2'>$percent$%</span>"
 
@@ -112,7 +113,8 @@ function loadLibraries(){
       li.onclick = gameclick;
       
       li.innerHTML = gameConstructor.replaceAll(
-        '$name$', game.name, '$size$', game.formattedSize, '$percent$', game.percentString,
+        '$name$', game.name, '$id$', game.id,
+        '$size$', game.formattedSize, '$percent$', game.percentString,
         '$colour$', game.colour)
       
       list.appendChild(game.element)
