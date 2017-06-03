@@ -32,7 +32,8 @@ String.prototype.replaceAll = function(/*find, replace, find2, replace2... */) {
  * by default; specify `binary` as true for ISO decimal (KB, MB, *1000).
  * @param {Number} size
  * @param {Number} digits - max decimal places to round to, default 1.
- * @param {bool} binary - use IEC binary prefixes. Default true.
+ * @param {Boolean} binary - use IEC binary prefixes. Default true.
+ * @returns {String}
  */
 function formatBytes(size, digits, binary) {
   if( arguments.length == 0 ){ return "0 B"; }
@@ -55,9 +56,8 @@ function formatBytes(size, digits, binary) {
   }
   
   if( binary && prefix ){ prefix += "i"; }
-  if( prefix ){ size = size.round(digits) }
    
-  return size + " " + prefix + "B";
+  return size.round(digits) + " " + prefix + "B";
 }
 
 /**
@@ -83,12 +83,12 @@ function formatTimeDelta(duration){
 /* Number functions */
 
 /**
- * Floating-point round to string.
- * For a fixed-digit string, use Number.toFixed().
+ * Rounds to X decimal places as a string for display. For numerical value, use parseFloat.
  * @param {Number} places - the amount of digits maximum to use after the decimal point.
- * @param {Boolean} asNumber - set to true to return a number (which may have floating point errors.)
+ * @returns {String}
  */
-Number.prototype.round = function(places, asNumber){
+Number.prototype.round = function(places){
+  if( Number.isInteger(this) ){ return this.toString() }
   if( arguments.length < 2 ){ asNumber = false; }
   
   var integer = Math.floor(this);
@@ -99,6 +99,5 @@ Number.prototype.round = function(places, asNumber){
       factor = Math.pow(10, places),
       floating = Math.round((this - integer) * factor) / factor,
       number = integer + floating.toString().substring(1, places + 2);
-  if( asNumber ){ return parseFloat(number) }
   return number
 }
