@@ -74,7 +74,7 @@ var libraryConstructor = '\
 var gameConstructor = "\
 $name$\
 <span style='color: $colour$' class='col1'>$size$</span>\
-<span style='color: $colour$' class='col2'>$percent$%</span>\
+<span style='color: $colour$' class='col2'>$percent$%</span>"
 
 function loadLibraries(){
   for( i = 0; i < libraries.length; i++ ) {
