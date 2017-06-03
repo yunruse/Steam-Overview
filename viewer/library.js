@@ -96,8 +96,6 @@ function loadLibraries(){
       '$usedPercent$', usedPercent,
       '$gamePercent$', gamePercent);
     
-    library.box = el.getElementsByClassName('titlebox')[0];
-    library.title = el.getElementsByClassName('title')[0];
     library.bar = el.getElementsByClassName('drivebar')[0];
     library.selected = el.getElementsByClassName('selected')[0];
     

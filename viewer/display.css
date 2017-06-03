@@ -49,16 +49,13 @@ ol, ul {
   list-style-type: none;
 }
 
-.title, .titlebox {
-  display: block;
-  height: 5em;
-  background-color: #333;
-}
 
-.drivebar { top: -20px; }
+.header { background-color: #333; }
+
+.drivebar { top: -1em; }
 
 .drivebar, .barsegment {
-  height: 32px;
+  height: 1.8em;
   font-weight: bold;
   text-align: right;
   vertical-align: bottom;
@@ -70,13 +67,6 @@ ol, ul {
   background-color: #eee;
   position: relative;
   color: #222;
-}
-
-.fixed {
-  top: 0;
-  z-index: 8;
-  width: 100%;
-  position: fixed !important;
 }
 
 .barsegment {
