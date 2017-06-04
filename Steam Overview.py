@@ -6,75 +6,18 @@ import shutil
 import json
 
 import file
+import steamfile
 
-__dir__ = ['isSteamLibrary', 'isSteamPath', 'getLibraryPaths', 'Game', 'Library', 'getLibraries']
-
-def isSteamLibrary(path):
-    '''Return True if the path is a valid Steam library, containing /steamapps/common/'''
-    
-    steamapps = file.path(path, 'steamapps', 'common')
-    return os.path.isdir(steamapps)
-
-def isSteamBase(path):
-    '''Return True if the path is a base Steam library, containing /steamapps/libraryfolders.vdf'''
-    
-    path = file.path(path)
-    folders = file.path(path, 'steamapps', 'libraryfolders.vdf')
-    return isSteamLibrary(path) and os.path.isfile(folders)
-
-def readSteamFile(path):
-    '''Scrapes top-level information from Steam-formatted ACF or VDF file as dictionary.
-    Any numerical indexes are placed into dict['_list'].'''
-    
-    info = {'_list': []}
-    with open(path) as file:
-        for line in file.readlines():
-            result = re.findall(r'^\t"(.+?)"\t\t"(.+?)"', line)
-            if not result:
-                continue
-            key, value = result[0]
-            if key.isdigit():
-                info['_list'].append(value)
-            else:
-                info[key] = value
-    return info
-
-# Unix-like directories to check
-_BASEPATHS = {
-    os.path.expanduser('~/Library/Application Support/Steam/'),
-    os.path.expanduser('~/.steam/'), os.path.expanduser('~/.local/share/Steam'),
-    '/'
-}
-
-# Windows directories
-for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
-    if i in os.environ:
-        i = file.path(os.environ[i], 'Steam')
-        _BASEPATHS.add(i)
-
-def getLibraryPaths(base=None):
-    '''Returns a list of library paths found, of which the first is the base.'''
-    
-    if base is None:
-        for base in _BASEPATHS:
-            if isSteamBase(base):
-                break
-        else:
-            return []
-    
-    try:
-        paths = [base] + readSteamFile(file.path(base, 'steamapps', 'libraryfolders.vdf'))['_list']
-    except FileNotFoundError:
-        return []
-    
-    return [file.path(i) for i in paths]
+if __name__ == '__main__':
+    import time
+    import webbrowser
 
 class Game:
     __slots__ = ['id', 'directory', 'name', 'size']
     
     def __init__(self, path):
         '''Game, given path to ACF reference.'''
-        info = readSteamFile(path)
+        info = steamfile.readSteamFile(path)
         
         self.id = info.get('appid', None)
         self.directory = info.get('installdir', None)
@@ -113,6 +56,28 @@ class Library(list):
         return {'path': self.path, 'sizeTotal': self.sizeTotal, 'sizeUsed': self.sizeUsed,
                 'sizeGames': self.sizeGames, 'games': [game.toDictionary() for game in self]}
 
+# Main program
+
+def _getPaths(log):
+    paths = steamfile.getLibraryPaths()
+    attempts = 0
+    while len(paths) == 0:
+        # Slightly conversational because if you're here, something's wrong
+        if attempts == 0:
+            log("Couldn't automatically find Steam install directory.")
+            print("Sorry about that. Please provide a path:")
+        elif attempts <= 2:
+            print("Sorry, I couldn't find anything there. Are you sure you have Steam")
+            print("installed? Please check you have libraryfolders.vdf at your path.")
+        
+        attempts += 1
+        paths = getLibraryPaths(input("~ "))
+    
+    if attempts == 0:
+        log("Found Steam installed at '{}'".format(paths[0]))
+
+    return paths
+
 FORMAT = '''\
 /* Steam Overview data
  * Log:
@@ -122,43 +87,25 @@ FORMAT = '''\
 var lastRetrieved = {},
     libraries = {};'''
 
-def main():
+def _main():
     logtxt = []
     def log(text):
         text = time.strftime('%H:%M:%S ') + text
         print(text)
         logtxt.append(text)
     
-    log('Getting paths...')
-    
+    log('Looking for Steam install directory...')
+    paths = _getPaths(log)
+
     libraries = []
-    def getLibraries(paths):
-        for path in paths:
-            log('Getting games at {}...'.format(path))
-            lib = Library(path)
-            if len(lib):
-                libraries.append(lib.toDictionary())
-                log('{} found.'.format(len(lib)))
-            else:
-                log('No games found, ignoring.')
-    
-    getLibraries(getLibraryPaths())
-    
-    incorrect = 0
-    while len(libraries) == 0:
-        if incorrect > 2:
-            print("Are you sure you have Steam installed? Please check you have a")
-            input("libraryfolders.vdf at your path. Exiting...")
-            exit()
-        elif incorrect == 0:
-            print("Sorry, but Steam Overview couldn't find your Steam install path.")
-            print("Please type your Steam install path (containing executable).")
+    for path in paths:
+        log('Getting games at {}...'.format(path))
+        lib = Library(path)
+        if len(lib):
+            libraries.append(lib.toDictionary())
+            log('{} found.'.format(len(lib)))
         else:
-            print("Nope, sorry, I couldn't find any Steam path there. Try again:")
-        incorrect += 1
-        
-        base = input("~ ")
-        getLibraries(getLibraryPaths(base))
+            log('No games found, ignoring.')
     
     log('Done, dumping to `libraries.js` and opening `viewer/viewer.html`...')
     
@@ -170,11 +117,11 @@ def main():
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)
 
-    print('This log is available at the head of `libraries.js` for reference.')
-    print('Exiting in 5 seconds...')
-    time.sleep(5)
+    print('\nThis log is available at the head of `libraries.js` for reference.')
+    print('Closing in 10 seconds...')
+    time.sleep(10)
 
 if __name__ == '__main__':
     import time
     import webbrowser
-    main()
+    _main()
