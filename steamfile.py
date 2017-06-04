@@ -9,7 +9,6 @@ import file
 
 __dir__ = ('readSteamFile', 'isSteamLibrary', 'isSteamBase', 'getLibraryPaths')
 
-isWindows = (os.name == 'nt')
 
 def readSteamFile(path):
     '''Scrapes top-level information from Steam-formatted ACF or VDF file as dictionary.
@@ -44,34 +43,33 @@ def isSteamBase(path):
     return isSteamLibrary(path) and os.path.isfile(folders)
 
 # Steam base finder
-_UNIXBASES = (
-    '~/Library/Application Support/Steam/', #macOS
-    '~/.local/share/Steam', #Most Linux distros
-    '~/.steam/' #Some Linux distros
-)
-def _sbUnix():
-    for i in _UNIXBASES:
-        yield os.path.expanduser(i)
 
-def _sbWindows():
-    # Consult environment paths
-    for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
-        if i in os.environ:
-            yield file.path(os.environ[i], 'Steam')
+if os.name == 'nt':
     
-    # Try all drive letters
-    for a in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
-        a += ':/' #me_irl
-        yield file.path(a, 'Program Files', 'Steam')
-        yield file.path(a, 'Program Files (x86)', 'Steam')
+    def _finder():
+        # Consult environment paths
+        for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
+            if i in os.environ:
+                yield file.path(os.environ[i], 'Steam')
+        
+        # Try all drive letters
+        for a in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            a += ':/' #me_irl
+            yield file.path(a, 'Program Files', 'Steam')
+            yield file.path(a, 'Program Files (x86)', 'Steam')
+     
+else:
+    _UNIXBASES = (
+        '~/Library/Application Support/Steam/', #macOS
+        '~/.local/share/Steam', #Most Linux distros
+        '~/.steam/' #Some Linux distros
+    )
+    def _finder():
+        for i in _UNIXBASES:
+            yield os.path.expanduser(i)
 
 def getSteamBase():
-    if os.name == 'nt':
-        finder = _sbWindows()
-    else:
-        finder = _sbUnix()
-    
-    for path in finder:
+    for path in _finder():
         if isSteamBase(path):
             return path
     else:
