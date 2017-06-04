@@ -14,7 +14,28 @@ if __name__ == '__main__':
     import time
     import webbrowser
 
-class Game:
+class Lobject:
+    '''Limited Object - with fixed parameters and easy JSON conversion.
+    
+    The properties a Lobject may have - __slots__ - must be overridden.'''
+    
+    __slots__ = []
+    
+    def toDictionary(self):
+        return {key: getattr(self, key, None) for key in self.__slots__}
+
+    def fromDictionary(self, provider):
+        for key in self.__slots__:
+            self[key] = provider.get(key, None)
+    
+    def __repr__(self):
+        return '<{}, properties: {}>'.format(type(self).__name__, len(self.__slots__))
+
+    def __str__(self):
+        contents = repr(self.toDictionary())[1:-1]
+        return '<{}, {}>'.format(type(self).__name__, contents)
+
+class Game(Lobject):
     __slots__ = ['id', 'directory', 'name', 'size']
     
     def __init__(self, path):
@@ -25,38 +46,32 @@ class Game:
         self.directory = info.get('installdir', None)
         self.name = info.get('name', self.directory)
         self.size = int(info.get('SizeOnDisk', 0))
-    
-        gamepath = file.path(os.path.split(path)[0], 'common', self.directory)
-        self.size = file.dirsize(gamepath).totalSize
-    
-    def toDictionary(self):
-        return {key: getattr(self, key, None) for key in self.__slots__}
-    
-    def __repr__(self):
-        return '<Game, {}>'.format(repr(self.toDictionary()).replace('{','').replace('}',''))
 
-class Library(list):
-    __slots__ = ['path', 'sizeTotal', 'sizeUsed', 'sizeGames']
+        if 'installdir' in info:
+            steamapps = os.path.split(path)[0]
+            dirpath = file.path(steamapps, 'common', self.directory)
+            self.size = file.dirsize(dirpath).totalSize
+
+class Library(Lobject):
+    __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
     
     def __init__(self, path):
         '''List of games, given path to library (NOT /steamapps).'''
         self.path = file.path(path)
+        self.games = []
         
         gamespath = file.path(path, 'steamapps')
         for i in os.listdir(gamespath):
             if i.startswith('appmanifest_') and i.endswith('.acf'):
                 i = file.path(gamespath, i)
-                self.append(Game(i))
+                self.games.append(Game(i))
+
+        self.games.sort(key=lambda g: g.size)
         
         self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(path)
-        self.sizeGames = sum(game.size for game in self)
-    
-    def __repr__(self):
-        return '<Library, {} game{}>'.format(len(self), 's' if len(self) != 1 else '')
-    
-    def toDictionary(self):
-        return {'path': self.path, 'sizeTotal': self.sizeTotal, 'sizeUsed': self.sizeUsed,
-                'sizeGames': self.sizeGames, 'games': [game.toDictionary() for game in self]}
+        self.sizeFree = self.sizeTotal - self.sizeUsed
+        
+        self.sizeGames = sum(game.size for game in self.games)
 
 # Main program
 
@@ -103,20 +118,17 @@ def _main():
     for path in paths:
         log('Getting games at {}...'.format(path))
         lib = Library(path)
-        if len(lib):
-            libraries.append(lib.toDictionary())
-            log('{} found.'.format(len(lib)))
+        if len(lib.games):
+            libraries.append(lib)
+            log('{} found.'.format(len(lib.games)))
         else:
             log('No games found, ignoring.')
     
     log('Done, dumping to `libraries.js` and opening `viewer/viewer.html`...')
     
     with open('libraries.js', 'w') as f:
-        f.write(FORMAT.format(
-            __ver__,
-            '\n * '.join(logtxt),
-            time.time(),
-            json.dumps(libraries, indent=1)))
+        _json = json.dumps(libraries, indent=1, default=lambda obj: obj.toDictionary())
+        f.write(FORMAT.format(__ver__, '\n * '.join(logtxt), time.time(), _json))
     
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)

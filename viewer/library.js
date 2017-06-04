@@ -23,8 +23,6 @@ window.onload = function(){
 function updateLibraries(){
   for( var i = 0; i < libraries.length; i++ ) {
     var library = libraries[i];
-    library.sizeFree = library.sizeTotal - library.sizeUsed;
-    library.games.sort(function(a, b){return b.size - a.size})
     
     /* Quasi-random but tied to size for constancy */
     var hue = (library.sizeUsed % 1000) * (360 / 1000);
