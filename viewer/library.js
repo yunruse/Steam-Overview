@@ -125,7 +125,7 @@ function loadLibraries(){
       
       /* Convince weird pixel rounding to err on the round-up side
        * so as to avoid gaps between segments. */
-      bar.style.width = "calc(" + game.percentTaken + "% + 0.2px)";
+      bar.style.width = "calc(" + game.percentTaken + "% + 0.1px)";
       bar.style.left = leftWidth + "%";
       
       bar.style.backgroundColor = game.colour;
