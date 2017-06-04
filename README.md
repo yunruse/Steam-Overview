@@ -1,6 +1,8 @@
 # Steam Overview v1.1
 ![A screenshot of Steam Overview open in the browser.](animation.gif)
 
+*(Ignore the choppy row colours. GIFs are weird.)*
+
 A toolkit for easy overview of your Steam games and how much space in your drive they take.
 
 [Download], extract and run `Steam Overview.py` (requires [Python] > 3.6); after scanning the results will appear in your browser.
