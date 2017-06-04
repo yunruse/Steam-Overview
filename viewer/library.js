@@ -22,10 +22,10 @@ window.onload = function(){
 
 function updateLibraries(){
   for( var i = 0; i < libraries.length; i++ ) {
-    var library = libraries[i];
-    
-    /* Quasi-random but tied to size for constancy */
-    var hue = (library.sizeUsed % 1000) * (360 / 1000);
+    var library = libraries[i],
+        // Quasi-random but tied to size for constancy
+        randomIsh = (library.sizeUsed % 1000) / 1000,
+        hue = 60 + randomIsh * 120; // Visual opposite of 'All games' hue
     
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
@@ -37,7 +37,7 @@ function updateLibraries(){
       game.formattedSize = formatBytes(game.size, 1, true);
       
       game.colour = "hsl(" + hue + ", 100%, 70%";
-      hue += 360 / library.games.length;
+      hue += (360 / library.games.length) + 140;
       hue %= 360;
     }
   }
