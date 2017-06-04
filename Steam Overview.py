@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+__ver__ = '1.1'
+
 import os
 import re
 import shutil
@@ -79,7 +81,7 @@ def _getPaths(log):
     return paths
 
 FORMAT = '''\
-/* Steam Overview data
+/* Steam Overview {}
  * Log:
  * {}
  */
@@ -111,7 +113,9 @@ def _main():
     
     with open('libraries.js', 'w') as f:
         f.write(FORMAT.format(
-            '\n * '.join(logtxt), time.time(),
+            __ver__,
+            '\n * '.join(logtxt),
+            time.time(),
             json.dumps(libraries, indent=1)))
     
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
