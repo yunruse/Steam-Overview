@@ -18,7 +18,6 @@ window.onload = function(){
     errorDisplay.classList.remove('hidden');
     errorDisplay.innerHTML = 'It has been more than 30 minutes since scanned – please rerun <code>Steam Overview.py</code>.';
   }
-  
 }
 
 function updateLibraries(){
@@ -26,7 +25,6 @@ function updateLibraries(){
     var library = libraries[i];
     library.sizeFree = library.sizeTotal - library.sizeUsed;
     library.games.sort(function(a, b){return b.size - a.size})
-    library.significantGames = [];
     
     /* Quasi-random but tied to size for constancy */
     var hue = (library.sizeUsed % 1000) * (360 / 1000);
@@ -35,7 +33,6 @@ function updateLibraries(){
       var game = library.games[j];
       game.library = library;
       game.percentTaken = (100 * (game.size / library.sizeTotal));
-      if( game.percentTaken > 1 ){ library.significantGames.push(game) }
       game.percentString = game.percentTaken.round(2);
       if( game.percentString == "0" ){ game.percentString = "< 0.01"; }
       
