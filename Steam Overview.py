@@ -45,7 +45,7 @@ class Library:
                 i = file.path(gamespath, i)
                 self.games.append(Game(i))
 
-        self.games.sort(key=lambda g: g.size)
+        self.games.sort(key=lambda g: g.size, reverse=True)
         
         self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(path)
         self.sizeFree = self.sizeTotal - self.sizeUsed
