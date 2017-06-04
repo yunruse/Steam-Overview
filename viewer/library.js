@@ -30,8 +30,8 @@ function updateLibraries(){
     for( var j = 0; j < library.games.length; j++ ){
       var game = library.games[j];
       game.library = library;
-      game.percentTaken = (100 * (game.size / library.sizeTotal));
-      game.percentString = game.percentTaken.round(2);
+      game.percentString = (100 * (game.size / library.sizeTotal)).round(2);
+      game.percentTaken = parseFloat(game.percentString);
       if( game.percentString == "0" ){ game.percentString = "< 0.01"; }
       
       game.formattedSize = formatBytes(game.size, 1, true);
