@@ -35,19 +35,19 @@ def dirsize(path):
     '''Get bytes used by directory and amount of files.
     
     > dirsize('/path/to/directory/')
-    (134240, 27)
+    size(134240, 27)
     > dirsize('/path/to/file.txt')
-    (5836, 1)
+    size(5836, 1)
     > dirsize('notanactualfile')
-    (0, 0)'''
+    size(0, 0)'''
     
     if not os.path.exists(path):
-        return 0, 0
+        return size(0, 0)
     elif os.path.isfile(path):
         try:
-            return os.lstat(path).st_size, 1
+            return size(os.lstat(path).st_size, 1)
         except os.error:
-            return 0, 1
+            return size(0, 1)
     
     totalSize = 0
     seen = set()
