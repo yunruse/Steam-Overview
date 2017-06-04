@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''Path and file functions.'''
+'''Generic path and file functions for whole filesystem.'''
 
 import sys
 import os
@@ -9,26 +9,26 @@ import re
 
 # Path functions
 
-def _fixpath(path):
-    '''Fix path to internal format.'''
-    path = path.replace('\\', '/')
-    path = re.sub(r'(^|/)\./', '', path)
-    return path
+def _fixpath(_path, sep='/'):
+    '''Fixes dot problems with path and changes separator.'''
+    if os.path.isabs(_path):
+        _path = os.path.abspath(_path)
+    else:
+        _path = os.path.relpath(_path)
+    return _path.replace(os.sep, '/')
+
+def path(_path, *paths, sep='/'):
+    if paths:
+        _path = _fixpath(_path, sep)
+        _path = os.path.join(_path, *paths)
+    
+    return _fixpath(_path, sep)
 
 def relpath(path, start=''):
     if start == path:
         return ''
     else:
         return path(os.path.relpath(path, start))
-
-def path(path, *paths):
-    path = _fixpath(path)
-    if paths:
-        path = os.path.join(path, *paths)
-    if os.path.isabs(path):
-        # If not relative, fix out any '..'
-        path = os.path.abspath(path)
-    return _fixpath(path)
 
 # File sizes
 
