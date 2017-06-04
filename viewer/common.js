@@ -72,7 +72,7 @@ Number.prototype.round = function(places){
   if( arguments.length < 2 ){ asNumber = false; }
   
   var integer = Math.floor(this);
-  if( places < 1 ){ return asNumber ? integer : integer.toString(); }  
+  if( places < 1 ){ return integer.toString(); }  
   
   var places = (arguments.length == 0)
                ? 1 : Math.min(Math.floor(places), 20),
