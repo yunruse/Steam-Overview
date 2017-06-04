@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''Path and file functions.'''
 
 import sys
