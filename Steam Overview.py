@@ -14,28 +14,7 @@ if __name__ == '__main__':
     import time
     import webbrowser
 
-class Lobject:
-    '''Limited Object - with fixed parameters and easy JSON conversion.
-    
-    The properties a Lobject may have - __slots__ - must be overridden.'''
-    
-    __slots__ = []
-    
-    def toDictionary(self):
-        return {key: getattr(self, key, None) for key in self.__slots__}
-
-    def fromDictionary(self, provider):
-        for key in self.__slots__:
-            self[key] = provider.get(key, None)
-    
-    def __repr__(self):
-        return '<{}, properties: {}>'.format(type(self).__name__, len(self.__slots__))
-
-    def __str__(self):
-        contents = repr(self.toDictionary())[1:-1]
-        return '<{}, {}>'.format(type(self).__name__, contents)
-
-class Game(Lobject):
+class Game:
     __slots__ = ['id', 'directory', 'name', 'size']
     
     def __init__(self, path):
@@ -52,7 +31,7 @@ class Game(Lobject):
             dirpath = file.path(steamapps, 'common', self.directory)
             self.size = file.dirsize(dirpath).totalSize
 
-class Library(Lobject):
+class Library:
     __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
     
     def __init__(self, path):
@@ -104,6 +83,8 @@ FORMAT = '''\
 var lastRetrieved = {},
     libraries = {};'''
 
+slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slots__}
+
 def _main():
     logtxt = []
     def log(text):
@@ -127,7 +108,7 @@ def _main():
     log('Done, dumping to `libraries.js` and opening `viewer/viewer.html`...')
     
     with open('libraries.js', 'w') as f:
-        _json = json.dumps(libraries, indent=1, default=lambda obj: obj.toDictionary())
+        _json = json.dumps(libraries, indent=1, default=slottableToDict)
         f.write(FORMAT.format(__ver__, '\n * '.join(logtxt), time.time(), _json))
     
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
