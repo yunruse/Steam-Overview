@@ -45,8 +45,13 @@ def isSteamBase(path):
 # Steam base finder
 
 if os.name == 'nt':
+    import winreg
     
     def _finder():
+        # Consult registry
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
+            yield winreg.QueryValueEx(key, 'SteamPath')[0]
+        
         # Consult environment paths
         for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
             if i in os.environ:
