@@ -12,7 +12,7 @@ window.onload = function(){
     if( timeSince > 30 * 60 ){
       /* More than 30 minutes, use warning */
       errorDisplay.classList.remove('hidden');
-      errorDisplay.innerText = 'It has been more than 30 minutes since scanned – please rerun `Steam Overview.py`.';
+      errorDisplay.innerHTML = 'It has been more than 30 minutes since scanned – please rerun <code>Steam Overview.py</code>.';
     }
   } else {
     errorDisplay.classList.remove('hidden');
