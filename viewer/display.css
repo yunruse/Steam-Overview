@@ -35,13 +35,13 @@ h1 {
   font-size: 4em;
 }
 
-h2 {
+.error {
   font-size: 2em;
   font-style: italic;
+  color: #f88;
   font-weight: lighter;
 }
 
-#errorDisplay { color: #f88; }
 .hidden { display: none !important; }
 
 ol, ul { list-style-type: none; }
