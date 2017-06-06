@@ -46,11 +46,18 @@ def isSteamBase(path):
 
 if os.name == 'nt':
     import winreg
+    import win32file
+
+    def doesDriveExist(letter):
+        (win32file.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0 
     
     def _finder():
         # Consult registry
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
-            yield winreg.QueryValueEx(key, 'SteamPath')[0]
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
+                yield winreg.QueryValueEx(key, 'SteamPath')[0]
+        except FileNotFoundError:
+            pass #
         
         # Consult environment paths
         for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
