@@ -1,9 +1,8 @@
 /* Useful functions */
 
-String.prototype.replaceAll = function(/*find, replace, find2, replace2... */) {
-  if( arguments.length < 2 ){ return; }
-  var string = this;
-  for( var i = 0; i < arguments.length; i += 2 ){
+function replaceAll(string /*, find, replace, find2, replace2... */) {
+  if( arguments.length <3 ){ return; }
+  for( var i = 1; i < arguments.length; i += 2 ){
     var find = arguments[i], replace = arguments[i + 1];
     while( string.indexOf(find) != -1 ){
       string = string.replace(find, replace);

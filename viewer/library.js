@@ -82,7 +82,7 @@ function loadLibraries(){
           library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
         el = document.createElement('li');
     
-    el.innerHTML = libraryConstructor.replaceAll(
+    el.innerHTML = replaceAll(libraryConstructor,
       '$title$', title,
       '$free$', formatBytes(library.sizeFree, 1),
       '$used$', formatBytes(library.sizeUsed, 1),
@@ -107,7 +107,7 @@ function loadLibraries(){
       li.onmouseout = gameout;
       li.onclick = gameclick;
       
-      li.innerHTML = gameConstructor.replaceAll(
+      li.innerHTML = replaceAll(gameConstructor,
         '$name$', game.name, '$id$', game.id,
         '$size$', game.formattedSize, '$percent$', game.percentString,
         '$colour$', game.colour)
