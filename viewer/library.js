@@ -1,4 +1,4 @@
-var libraryList, timeDisplay;
+var libraryList, errorDisplay;
 
 window.onload = function(){
   libraryList = document.getElementById('drives');
