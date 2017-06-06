@@ -10,8 +10,11 @@ window.onload = function(){
     return;
   }
   
-  updateLibraries();
-  loadLibraries();
+  for( var i = 0; i < libraries.length; i++ ) {
+    var library = libraries[i];
+    assignValuesToLibrary(library);
+    displayLibrary(library)
+  }
   var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved;
   if( timeSince > 30 * 60 ){
     /* More than 30 minutes, use warning */
@@ -20,26 +23,24 @@ window.onload = function(){
   }
 }
 
-function updateLibraries(){
-  for( var i = 0; i < libraries.length; i++ ) {
-    var library = libraries[i],
-        // Quasi-random but tied to size for constancy
-        randomIsh = (library.sizeUsed % 1000) / 1000,
-        hue = 60 + randomIsh * 120; // Visual opposite of 'All games' hue
+function assignValuesToLibrary(library){
+  var library = libraries[i],
+      // Quasi-random but tied to size for constancy
+      randomIsh = (library.sizeUsed % 1000) / 1000,
+      hue = 60 + randomIsh * 120; // Visual opposite of 'All games' hue
+  
+  for( var j = 0; j < library.games.length; j++ ){
+    var game = library.games[j];
+    game.library = library;
+    game.percentString = (100 * (game.size / library.sizeTotal)).round(2);
+    game.percentTaken = parseFloat(game.percentString);
+    if( game.percentString == "0" ){ game.percentString = "< 0.01"; }
     
-    for( var j = 0; j < library.games.length; j++ ){
-      var game = library.games[j];
-      game.library = library;
-      game.percentString = (100 * (game.size / library.sizeTotal)).round(2);
-      game.percentTaken = parseFloat(game.percentString);
-      if( game.percentString == "0" ){ game.percentString = "< 0.01"; }
-      
-      game.formattedSize = formatBytes(game.size, 1, true);
-      
-      game.colour = "hsl(" + hue + ", 100%, 70%";
-      hue += (360 / library.games.length) + 140;
-      hue %= 360;
-    }
+    game.formattedSize = formatBytes(game.size, 1, true);
+    
+    game.colour = "hsl(" + hue + ", 100%, 70%";
+    hue += (360 / library.games.length) + 140;
+    hue %= 360;
   }
 }
 
@@ -72,66 +73,64 @@ $name$\
 <span style='color: $colour$' class='col1'>$size$</span>\
 <span style='color: $colour$' class='col2'>$percent$%</span>"
 
-function loadLibraries(){
-  for( i = 0; i < libraries.length; i++ ) {
-    var library = libraries[i];
-    var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2),
-        freePercent = (100 * (library.sizeFree / library.sizeTotal)).round(2),
-        gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2),
-        title = library.path + ' (' + formatBytes(library.sizeTotal, 1) + ', ' +
-          library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
-        el = document.createElement('li');
+function displayLibrary(library){
+  var library = libraries[i];
+  var usedPercent = (100 * (library.sizeUsed / library.sizeTotal)).round(2),
+      freePercent = (100 * (library.sizeFree / library.sizeTotal)).round(2),
+      gamePercent = (100 * (library.sizeGames / library.sizeTotal)).round(2),
+      title = library.path + ' (' + formatBytes(library.sizeTotal, 1) + ', ' +
+        library.games.length + ' game' + (library.games.length == 1 ? '' : 's') + ')',
+      el = document.createElement('li');
+  
+  el.innerHTML = replaceAll(libraryConstructor,
+    '$title$', title,
+    '$free$', formatBytes(library.sizeFree, 1),
+    '$used$', formatBytes(library.sizeUsed, 1),
+    '$usedGames$', formatBytes(library.sizeGames, 1),
+    '$freePercent$', freePercent,
+    '$usedPercent$', usedPercent,
+    '$gamePercent$', gamePercent);
+  
+  library.bar = el.getElementsByClassName('drivebar')[0];
+  library.withSelected = el.getElementsByClassName('withSelected')[0];
+  
+  var list = el.getElementsByTagName('ul')[0],
+      leftWidth = 0;
+  
+  for( j = 0; j < library.games.length; j++ ){
+    var game = library.games[j],
+        li = game.element = document.createElement('li');
     
-    el.innerHTML = replaceAll(libraryConstructor,
-      '$title$', title,
-      '$free$', formatBytes(library.sizeFree, 1),
-      '$used$', formatBytes(library.sizeUsed, 1),
-      '$usedGames$', formatBytes(library.sizeGames, 1),
-      '$freePercent$', freePercent,
-      '$usedPercent$', usedPercent,
-      '$gamePercent$', gamePercent);
+    li.classList = 'item';
     
-    library.bar = el.getElementsByClassName('drivebar')[0];
-    library.withSelected = el.getElementsByClassName('withSelected')[0];
+    li.onmouseover = gameover;
+    li.onmouseout = gameout;
+    li.onclick = gameclick;
     
-    var list = el.getElementsByTagName('ul')[0],
-        leftWidth = 0;
+    li.innerHTML = replaceAll(gameConstructor,
+      '$name$', game.name, '$id$', game.id,
+      '$size$', game.formattedSize, '$percent$', game.percentString,
+      '$colour$', game.colour)
     
-    for( j = 0; j < library.games.length; j++ ){
-      var game = library.games[j],
-          li = game.element = document.createElement('li');
-      
-      li.classList = 'item';
-      
-      li.onmouseover = gameover;
-      li.onmouseout = gameout;
-      li.onclick = gameclick;
-      
-      li.innerHTML = replaceAll(gameConstructor,
-        '$name$', game.name, '$id$', game.id,
-        '$size$', game.formattedSize, '$percent$', game.percentString,
-        '$colour$', game.colour)
-      
-      list.appendChild(game.element)
-      game.element = li;
+    list.appendChild(game.element)
+    game.element = li;
+  
+    var bar = document.createElement('span');
+    bar.className = "barsegment part";
     
-      var bar = document.createElement('span');
-      bar.className = "barsegment part";
-      
-      /* Convince weird pixel rounding to err on the round-up side
-       * so as to avoid gaps between segments. */
-      bar.style.width = "calc(" + game.percentTaken + "% + 0.1px)";
-      bar.style.left = leftWidth + "%";
-      
-      bar.style.backgroundColor = game.colour;
-      leftWidth += game.percentTaken;
-      
-      library.bar.appendChild(bar);
-      game.bar = bar;
-    }
-    libraryList.appendChild(el);
-    library.element = el;
+    /* Convince weird pixel rounding to err on the round-up side
+     * so as to avoid gaps between segments. */
+    bar.style.width = "calc(" + game.percentTaken + "% + 0.1px)";
+    bar.style.left = leftWidth + "%";
+    
+    bar.style.backgroundColor = game.colour;
+    leftWidth += game.percentTaken;
+    
+    library.bar.appendChild(bar);
+    game.bar = bar;
   }
+  libraryList.appendChild(el);
+  library.element = el;
 }
 
 gameover  = function(){ gameSelect(this, true, false) }
