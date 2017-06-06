@@ -1,17 +1,4 @@
-/**
- * "Framework" for commonly-used functions.
- */
-
-/* String functions */
-
-
-String.prototype.beginsWith = function(prefix) {
-  return this.indexOf(prefix) == 0;
-}
-
-String.prototype.endsWith = function(suffix) {
-  return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
+/* Useful functions */
 
 String.prototype.replaceAll = function(/*find, replace, find2, replace2... */) {
   if( arguments.length < 2 ){ return; }
@@ -24,8 +11,6 @@ String.prototype.replaceAll = function(/*find, replace, find2, replace2... */) {
   }
   return string;
 };
-
-/* String formatting functions */
 
 /**
  * Returns a human-formatted file size. Uses IEC binary prefixes (KiB, MiB, *1024)
@@ -59,8 +44,6 @@ function formatBytes(size, digits, binary) {
    
   return size.round(digits) + " " + prefix + "B";
 }
-
-/* Number functions */
 
 /**
  * Rounds to X decimal places as a string for display. For numerical value, use parseFloat.
