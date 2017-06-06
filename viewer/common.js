@@ -46,16 +46,16 @@ function formatBytes(size, digits, binary) {
 }
 
 /**
- * Rounds to X decimal places as a string for display. For numerical value, use parseFloat.
+ * Returns rounded string to X decimal places (i.e. after the decimal point)
+ * For its numerical value, use parseFloat.
  * @param {Number} places - the amount of digits maximum to use after the decimal point.
  * @returns {String}
  */
 Number.prototype.round = function(places){
-  if( Number.isInteger(this) ){ return this.toString() }
-  if( arguments.length < 2 ){ asNumber = false; }
-  
   var integer = Math.floor(this);
-  if( places < 1 ){ return integer.toString(); }  
+  
+  if( this == integer ){ return this.toString() }
+  if( places < 1 ){ return integer.toString(); }
   
   var places = (arguments.length == 0)
                ? 1 : Math.min(Math.floor(places), 20),
