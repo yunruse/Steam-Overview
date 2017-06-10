@@ -13,9 +13,12 @@ function bindGame(game){
 
 function gameSelect(game, didMouse, didClick){
   var isLocked = (gameBindings['locked'] === game);
-  
   if( isLocked ){
     if( !didClick ) { return; /* No clicky, no unlocky! */ }
+    if( gameBindings['locked'] === game ){
+      didMouse = false;
+      gameBindings['locked'] = undefined;
+    }
     didClick = false;
   }
   
@@ -24,7 +27,6 @@ function gameSelect(game, didMouse, didClick){
     if( unlockGame ){
       gameHighlight(unlockGame, false, false, false)
     }
-    
     gameBindings['locked'] = game;
   }
   
@@ -41,21 +43,24 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
   var gC = game.element.classList;
   doLockIn ? gC.add('locked') : gC.remove('locked')
   
+  if( !doDisplayPotential ){ return; }
+  
   for( i = 0; i < libraries.length; i++ ) {
     var lib = libraries[i],
         percentTaken = 0,
         tooMuch = false;
     
-    if(lib){
+    if( lib.games.indexOf(game) !== -1 ){
+      /* Contains game – don't display */
       percentTaken = 0;
-    } else if( game.size > lib.sizeFree ) {
+    } else if ( game.size > lib.sizeFree ){
       tooMuch = true;
-      percentTaken = lib.sizeFree / lib.sizeTotal
+      percentTaken = lib.sizeFree / lib.sizeTotal;
     } else {
       percentTaken = game.size / lib.sizeTotal
     }
     
-    var w = lib.element.withSelected, wC = w.classList;
+    var w = lib.element.additional, wC = w.classList;
     tooMuch ? wC.add('tooMuch') : wC.remove('tooMuch');
     w.style.width = percentTaken * 100 + "%";
   }

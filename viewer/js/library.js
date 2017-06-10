@@ -37,7 +37,7 @@ var libraryItemContents = '\
   <div class="drivebar">Free\
     <div class="barsegment used"  style="width: $usedPercent$%;">Used</div>\
     <div class="barsegment games" style="width: $gamePercent$%;">All games</div>\
-    <div class="barsegment withSelected" style="width: 0%; left: $usedPercent$%;"></div>\
+    <div class="barsegment additional" style="width: 0%; left: $usedPercent$%;"></div>\
   </div>\
 </div>\
 <ul class="gamelist">\
@@ -72,7 +72,7 @@ function constructLibraryItem(library){
     '$gamePercent$', gamePercent);
   
   el.drivebar = el.getElementsByClassName('drivebar')[0];
-  el.withSelected = el.getElementsByClassName('withSelected')[0];
+  el.additional = el.getElementsByClassName('additional')[0];
   el.gameList = el.getElementsByClassName('gamelist')[0];
   
   return el;

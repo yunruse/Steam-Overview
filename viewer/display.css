@@ -101,7 +101,6 @@ ol, ul {
   left: 0;
   color: white;
   overflow: hidden;
-  transition: height 0.2s;
   height: 100%;
 } .barsegment::after, .drivebar::after {
     content: "  "
@@ -114,12 +113,20 @@ ol, ul {
     background-color: hsl(270, 70%, 50%);
     height: 90%;
   }
+
+.barsegment.additional {
+  opacity: 0.5;
+  transition: width 0.5s, color 0.5s;
+  background-color: hsl(120, 70%, 70%);
   
-  .barsegment.additional {
-    background-color: hsl(120, 70%, 70%);
+  text-align: center;
+  color: rgba(255, 255, 255, 0);
   } .barsegment.additional.tooMuch {
-      background-color: hsl(0, 70%, 70%);
-  }
+    background-color: hsl(0, 70%, 70%);
+    color: rgba(255, 255, 255, 1);
+  } .barsegment.additional::after{
+    content: "(Too big!) "
+}
 
 
 .barsegment.part {
@@ -128,7 +135,7 @@ ol, ul {
   bottom: 0%;
 } 
   .barsegment.part.hovered {
-      height: 90%; 
+      height: 90%;
   }
   
   .barsegment.part.locked {
@@ -174,12 +181,8 @@ ol, ul {
 
 .col1, .col2 { position: absolute; text-align: right;}
 
-.col1 {
-  right: 17%;
-}
-.col2 {
-  right: 2%;
-}
+.col1 { right: 17%; }
+.col2 { right:  2%; }
 
 .playLink {
   font-style: italic;
