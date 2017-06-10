@@ -4,6 +4,7 @@
 
 import os
 import re
+import string
 
 import file
 
@@ -42,31 +43,45 @@ def isSteamBase(path):
     folders = file.path(path, 'steamapps', 'libraryfolders.vdf')
     return isSteamLibrary(path) and os.path.isfile(folders)
 
-# Steam base finder
+# extremely OS-dependant steamBaseFinder()
 
 if os.name == 'nt':
-    import winreg
-    import win32file
-
-    def doesDriveExist(letter):
-        (win32file.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0 
+    registryPath = None
+    driveLetters = []
     
-    def _finder():
-        # Consult registry
-        try:
-            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
-                yield winreg.QueryValueEx(key, 'SteamPath')[0]
-        except FileNotFoundError:
-            pass #
+    try:
+        import winreg
+    except ModuleNotFoundError:
+        pass
+    else:
+        def consultRegistry():
+            try:
+                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
+                    return winreg.QueryValueEx(key, 'SteamPath')[0]
+            except FileNotFoundError:
+                pass
+    
+    try:
+        import win32file
+    except ModuleNotFoundError:
+        pass
+    else:
+        def _doesDriveExist(letter):
+            return (win32file.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0
+
+        driveLetters = [a + ':/' for a in string.ascii_uppercase if _doesDriveExist(a)]
+    
+    
+    def steamBaseFinder():
+        if registryPath is not None:
+            yield registryPath
         
-        # Consult environment paths
-        for i in ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'):
+        progfileKeys = ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432')
+        for i in progfileKeys:
             if i in os.environ:
                 yield file.path(os.environ[i], 'Steam')
         
-        # Try all drive letters
-        for a in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
-            a += ':/' #me_irl
+        for letter in driveLetters:
             yield file.path(a, 'Program Files', 'Steam')
             yield file.path(a, 'Program Files (x86)', 'Steam')
      
@@ -76,13 +91,13 @@ else:
         '~/.local/share/Steam', #Most Linux distros
         '~/.steam/' #Some Linux distros
     )
-    def _finder():
+    def steamBaseFinder():
         for i in _UNIXBASES:
             yield os.path.expanduser(i)
 
 def getSteamBase():
-    for path in _finder():
-        if isSteamBase(path):
+    for path in steamBaseFinder():
+        if path and isSteamBase(path):
             return path
     else:
         return None
