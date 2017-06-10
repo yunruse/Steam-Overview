@@ -1,15 +1,3 @@
-// Polyfills to work on older versions of Javascript
-
-// No need to check for these oneliners
-
-String.prototype.beginsWith = function(p) { return this.indexOf(p) == 0; };
-
-String.prototype.endsWith = function(suffix) {
-  return this.indexOf(suffix, this.length - suffix.length) !== -1;
-};
-
-Number.prototype.isInteger = function(){ this == Math.floor(this) };
-
 /* HTMLElement.classList polyfill copyright (c) 2014 Gabrielle Cirulli:
  * https://github.com/gabrielecirulli/2048/blob/master/js/classlist_polyfill.js
  */

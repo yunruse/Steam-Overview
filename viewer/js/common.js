@@ -15,7 +15,7 @@ function replaceAll(string /*, find, replace, find2, replace2... */) {
  * Returns a human-formatted file size. Uses IEC binary prefixes (KiB, MiB, *1024)
  * by default; specify `binary` as true for ISO decimal (KB, MB, *1000).
  * @param {Number} size
- * @param {Number} digits - max decimal places to round to, default 1.
+ * @param {Number} digits - max post-decimal point places to round to, default 1.
  * @param {Boolean} binary - use IEC binary prefixes. Default true.
  * @returns {String}
  */
@@ -41,25 +41,26 @@ function formatBytes(size, digits, binary) {
   
   if( binary && prefix ){ prefix += "i"; }
    
-  return size.round(digits) + " " + prefix + "B";
+  return roundDecimals(size, digits) + " " + prefix + "B";
 }
 
 /**
- * Returns rounded string to X decimal places (i.e. after the decimal point)
+ * Returns rounded string to X places after the decimal point.
  * For its numerical value, use parseFloat.
+ * @param {Number} givenNumber
  * @param {Number} places - the amount of digits maximum to use after the decimal point.
  * @returns {String}
  */
-Number.prototype.round = function(places){
-  var integer = Math.floor(this);
+roundDecimals = function(givenNumber, places){
+  var integer = Math.floor(givenNumber);
   
-  if( this == integer ){ return this.toString() }
+  if( this == integer ){ return givenNumber.toString() }
   if( places < 1 ){ return integer.toString(); }
   
-  var places = (arguments.length == 0)
+  var places = (arguments.length <= 1)
                ? 1 : Math.min(Math.floor(places), 20),
       factor = Math.pow(10, places),
-      floating = Math.round((this - integer) * factor) / factor,
-      number = integer + floating.toString().substring(1, places + 2);
-  return number
+      floating = Math.round((givenNumber - integer) * factor) / factor;
+  
+  return integer + floating.toString().substring(1, places + 2);
 }

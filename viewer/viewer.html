@@ -9,23 +9,31 @@
   <link rel="stylesheet" href="display.css"/>
   <link rel="shortcut icon" href="icon.png"/>
   
-  <script src="polyfills.js"></script>
-  <script src="common.js"></script>
-  <script src="library.js"></script>
+  <script src="js/polyfills.js"></script>
+  <script src="js/common.js"></script>
+   
   <script src="../libraries.js"></script>
+ 
+  <script src="js/gameSelector.js"></script>
+  <script src="js/library.js"></script>
+  
+  <script src="js/interface.js"></script>
 </head>
 <body>
 <div class='content'>
-  <a href="https://github.com/yunruse/Steam-Overview">
-    <img id='titleimage' src="icon.png"/>
-    <h1 id='title'>Steam Overview</h1>
+  <a id='title' href="https://github.com/yunruse/Steam-Overview">
+    <img src="icon.png"/>
+    <h1>Steam Overview</h1>
   </a>
-  <h2 id='errorDisplay' class="error" class='hidden'></h2>
-  <noscript class="error">
-      It appears you have Javascript disabled. (Steam Overview requires Javascript to generate the site from the data <code>Steam Overview.py</code> generates.)
-  </noscript>
-  <p>Hover over a game to see its size on the drive and what it would be on all other drives. Click to lock it in.</p>
-  <ol id='drives'></ol>
+  <h2 id=subtitle class='error'>
+    Where <code>Steam Overview.py</code> generates the data, SO's
+    JavaScript turns it into information. Please enable it in your browser.
+  </h2>
+  <p>
+    Hover over a game to see its size on the drive and what it would be
+    on all other drives. Click to lock it in.
+  </p>
+  <ol id=libraryList></ol>
 </div>
 </body>
 </html>
