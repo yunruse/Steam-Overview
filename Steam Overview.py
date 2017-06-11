@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 __ver__ = '1.1'
+PRODUCTION = True
 
 import os
 import re
@@ -75,10 +76,7 @@ def _getPaths(log):
     return paths
 
 FORMAT = '''\
-/* Steam Overview {}
- * Log:
- * {}
- */
+/* Steam Overview {} */
 
 var lastRetrieved = {},
     libraries = {};'''
@@ -86,18 +84,13 @@ var lastRetrieved = {},
 slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slots__}
 
 def _main():
-    logtxt = []
-    def log(text):
-        text = time.strftime('%H:%M:%S ') + text
-        print(text)
-        logtxt.append(text)
-    
+    log('\nSTEAM OVERVIEW VERSION {}\n'.format(__ver__), prependTime=False)
     log('Looking for Steam install directory...')
     paths = _getPaths(log)
 
     libraries = []
     for path in paths:
-        log('Getting games at {}...'.format(path))
+        log('Finding games at {}...'.format(path))
         lib = Library(path)
         if len(lib.games):
             libraries.append(lib)
@@ -105,20 +98,29 @@ def _main():
         else:
             log('No games found, ignoring.')
     
-    log('Done, dumping to `libraries.js` and opening `viewer/viewer.html`...')
+    log('Done, passing to `viewer/viewer.html`...')
     
     with open('libraries.js', 'w') as f:
         _json = json.dumps(libraries, indent=1, default=slottableToDict)
-        f.write(FORMAT.format(__ver__, '\n * '.join(logtxt), time.time(), _json))
+        f.write(FORMAT.format(__ver__, time.time(), _json))
     
     viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
     webbrowser.open_new_tab(viewer)
 
-    print('\nThis log is available at the head of `libraries.js` for reference.')
-    print('Closing in 10 seconds...')
-    time.sleep(10)
-
-if __name__ == '__main__':
+if __name__ == '__main__':    
     import time
     import webbrowser
-    _main()
+
+    with open('log.txt', 'w') as _log:
+        def log(text, prependTime=True):
+            if prependTime:
+                text = time.strftime('%H:%M:%S ') + text
+            print(text)
+            print(text, file=_log)
+        
+        try:
+            _main()
+        except Exception as e:
+            print("\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
+                type(e).__name__, ', '.join(e.args) ))
+            raise
