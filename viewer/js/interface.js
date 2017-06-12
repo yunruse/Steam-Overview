@@ -48,12 +48,6 @@ hintInterfaceLoop = function(){
   }
   var hintBindingID = Math.min(3, Math.floor(gameBindingsLength / 2))
       game = gameBindings[hintBindingID];
-   
-  if( everBound ){
-    // interaction - cancel tutorial
-    hintInterfaceDisplay(game, 0);
-    return;
-  }
   
   var timeToWait = hintInterfaceDisplay(game, hintInterfaceState);
   // carries out and returns time to wait

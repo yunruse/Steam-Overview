@@ -1,6 +1,5 @@
 var gameBindings = {},
-    gameBindingsLength = 0,
-    everBound = false;
+    gameBindingsLength = 0;
 
 function bindGame(game){
   game.bindingID = gameBindingsLength;
@@ -17,7 +16,6 @@ function bindGame(game){
 }
 
 function gameSelect(game, didMouse, didClick){
-  everBound = true;
   var isLocked = (gameBindings['locked'] === game);
   if( isLocked ){
     if( !didClick ) { return; /* No clicky, no unlocky! */ }
