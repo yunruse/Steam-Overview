@@ -56,7 +56,7 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
         percentTaken = 0,
         tooMuch = false;
     
-    if( !doHighlight ){
+    if( !doLockIn ){
       percentTaken = 0;
     } else if( lib.games.indexOf(game) !== -1 ){
       /* Contains game – don't display */

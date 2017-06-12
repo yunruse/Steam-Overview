@@ -44,9 +44,15 @@ ol, ul {
   padding-left: 0;
 }
 
+/* Generic classes */
+
 .smaller {
   font-size: 0.8em;
 }
+
+.hidden { display: none !important; }
+
+/* Interface specifics */
 
 #title {
   display: block;
@@ -76,7 +82,6 @@ ol, ul {
   color: #f88
 }
 
-.hidden { display: none !important; }
 @keyframes tutorialBoxAppear {
   from {
     top: 20px;
@@ -218,16 +223,4 @@ ol, ul {
 .item.hovered .playLink {
   opacity: 1;
   left: 30px;
-}
-
-#info h2 {
-  display: block;
-  position: absolute;
-  left: 10px;
-  top: -0.5em;
-}
-#infoImage {
-  position: absolute;
-  right: 0;
-  height: 100%;
 }
