@@ -50,14 +50,16 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
         percentTaken = 0,
         tooMuch = false;
     
-    if( lib.games.indexOf(game) !== -1 ){
+    if( !doHighlight ){
+      percentTaken = 0;
+    } else if( lib.games.indexOf(game) !== -1 ){
       /* Contains game – don't display */
       percentTaken = 0;
     } else if ( game.size > lib.sizeFree ){
       tooMuch = true;
-      percentTaken = lib.sizeFree / lib.sizeTotal;
+      percentTaken = (lib.sizeFree / lib.sizeTotal) + 0.001;
     } else {
-      percentTaken = game.size / lib.sizeTotal
+      percentTaken = game.size / lib.sizeTotal;
     }
     
     var w = lib.element.additional, wC = w.classList;
