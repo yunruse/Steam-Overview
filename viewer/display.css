@@ -165,7 +165,7 @@ ol, ul {
 .item:not(.locked):nth-child(even) {
   background-color: #444;
 }
-.item:not(.locked):hover {
+.item:not(.locked).hovered {
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
   color: white;
@@ -191,7 +191,7 @@ ol, ul {
   opacity: 0;
   transition: opacity 0.5s, left 0.5s;
 }
-.item:hover .playLink {
+.item.hovered .playLink {
   opacity: 1;
   left: 30px;
 }
