@@ -187,13 +187,13 @@ ol, ul {
 .playLink {
   font-style: italic;
   position: relative;
-  left: 30px;
+  left: 50px;
   opacity: 0;
   transition: opacity 0.5s, left 0.5s;
 }
 .item:hover .playLink {
   opacity: 1;
-  left: 10px;
+  left: 30px;
 }
 
 #info h2 {
