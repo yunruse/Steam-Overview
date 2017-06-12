@@ -35,34 +35,54 @@ window.onload = function(){
     throw e;
   }
   displayTimeSince();
-  setTimeout(hintInterface, 3000);
+  setTimeout(hintInterfaceLoop, 3000);
 }
 
-hintInterface = function(){
+// Hint interface animation
+
+var hintInterfaceState = 1;
+
+hintInterfaceLoop = function(){
   if( gameBindingsLength === 0 ){
     return;
   }
   var hintBindingID = Math.min(3, Math.floor(gameBindingsLength / 2))
-      game = gameBindings[hintBindingID],
-      lC = game.element.classList,
+      game = gameBindings[hintBindingID];
+   
+  if( everBound ){
+    // interaction - cancel tutorial
+    hintInterfaceDisplay(game, 0);
+    return;
+  }
+  
+  var timeToWait = hintInterfaceDisplay(game, hintInterfaceState);
+  // carries out and returns time to wait
+  setTimeout(hintInterfaceLoop, timeToWait);
+  hintInterfaceState++;
+}
+
+hintInterfaceDisplay = function(game, state){
+  var lC = game.element.classList,
       bC = game.barElement.classList;
   
-  if( !lC.contains('locked') ){
-    if( everBound ){
-      // User input, cancel minitutorial
-      return;
-    }
-    lC.add('locked');
-    bC.add('locked');
-    setTimeout(hintInterface, 4000);
-  } else {
-    if( gameBindings['locked'] == hintBindingID ){
-      // User decided to click the item, don't remove locke
-      return;
-    }
-    lC.remove('locked');
-    bC.remove('locked');
-    // Repeat if user doesn't respond
-    setTimeout(hintInterface, 15000);
+  switch( state ){
+    case 3:
+      lC.remove('locked');
+      bC.remove('locked');
+      return 2000;
+    case 2:
+      lC.add('locked');
+      bC.add('locked');
+      return 2000;
+    case 1:
+      lC.add('hovered');
+      bC.add('hovered');
+      return 2000;
+    default:
+      lC.remove('locked');
+      bC.remove('locked');
+      lC.remove('hovered');
+      bC.remove('hovered');
+      everBound = true;
   }
 }
