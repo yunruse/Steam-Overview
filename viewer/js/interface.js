@@ -35,4 +35,34 @@ window.onload = function(){
     throw e;
   }
   displayTimeSince();
+  setTimeout(hintInterface, 3000);
+}
+
+hintInterface = function(){
+  if( gameBindingsLength === 0 ){
+    return;
+  }
+  var hintBindingID = Math.min(3, Math.floor(gameBindingsLength / 2))
+      game = gameBindings[hintBindingID],
+      lC = game.element.classList,
+      bC = game.barElement.classList;
+  
+  if( !lC.contains('locked') ){
+    if( everBound ){
+      // User input, cancel minitutorial
+      return;
+    }
+    lC.add('locked');
+    bC.add('locked');
+    setTimeout(hintInterface, 4000);
+  } else {
+    if( gameBindings['locked'] == hintBindingID ){
+      // User decided to click the item, don't remove locke
+      return;
+    }
+    lC.remove('locked');
+    bC.remove('locked');
+    // Repeat if user doesn't respond
+    setTimeout(hintInterface, 15000);
+  }
 }
