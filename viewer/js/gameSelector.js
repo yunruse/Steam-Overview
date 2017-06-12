@@ -22,7 +22,7 @@ function gameSelect(game, didMouse, didClick){
   if( isLocked ){
     if( !didClick ) { return; /* No clicky, no unlocky! */ }
     if( gameBindings['locked'] === game ){
-      didMouse = false;
+      didMouse = true;
       gameBindings['locked'] = undefined;
     }
     didClick = false;
