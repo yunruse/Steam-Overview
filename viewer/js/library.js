@@ -15,6 +15,8 @@ function constructGameItem(game){
     '$size$', game.formattedSize, '$percent$', game.percentString,
     '$colour$', game.interfaceColour)
   
+  li.playLink = li.getElementsByClassName('playLink')[0];
+  
   return li;
 }
 
