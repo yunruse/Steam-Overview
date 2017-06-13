@@ -176,7 +176,7 @@ ol, ul {
 /* Game list */
 
 
-.item, .meta {
+.gamelist > li, .meta {
   font-size: 20px;
   padding-left: 10px;
   background-color: #555;
@@ -191,16 +191,16 @@ ol, ul {
 .meta.used { background-color: hsl(210, 50%, 30%); }
 .meta.allGames { background-color: hsl(270, 50%, 30%); }
 
-.item:not(.locked):nth-child(even) {
+.gamelist > li:not(.locked):nth-child(even) {
   background-color: #444;
 }
-.item:not(.locked).hovered {
+.gamelist > li:not(.locked).hovered {
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
   color: white;
 }
 
-.item.locked {
+.gamelist > li.locked {
   padding-left: 20px;
   margin-left: 30px;
   margin-right: 30px;
