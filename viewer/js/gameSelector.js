@@ -34,7 +34,7 @@ function gameSelect(game, didMouse, didClick){
     gameBindings['locked'] = game;
   }
   
-  gameHighlight(game, didMouse, didClick, true)
+  gameHighlight(game, didMouse, didClick, didClick)
 }
 
 function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
