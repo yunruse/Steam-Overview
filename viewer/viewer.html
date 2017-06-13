@@ -30,8 +30,16 @@
     Where <code>Steam Overview.py</code> generates the data, SO's
     JavaScript turns it into information. Please enable it in your browser.
   </h2>
-  <p id=tutorialBox>
-    <a onclick='startTutorial()'>[See tutorial again]</a>
+  <p class='info'>
+    <b>Help:</b>
+    <a onclick="classBool(steamHelp, 'visible')">[How do I manage Steam games?]</a>
+    <a id=tutorialBox onclick='startTutorial()'>[See tutorial again]</a>
+  </p>
+  <p id=steamHelp>
+    </br>
+    — <b>To manage game libraries</b>: <i>Steam → Settings → Downloads → Steam Library Folders</i>.
+    </br>
+    — <b>To backup, uninstall, verify, browse or move a game</b>: <i>Right click → Properties → Local Files.</i>
   </p>
   <ol id=libraryList></ol>
 </div>

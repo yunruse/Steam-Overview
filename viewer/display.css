@@ -82,7 +82,14 @@ ol, ul {
   color: #f88
 }
 
-@keyframes tutorialBoxAppear {
+.info {
+  font-style: italic;
+  position: relative;
+  height: 5px;
+  transition: height 0.5s;
+}
+
+@keyframes fadeUp {
   from {
     top: 20px;
     opacity: 0;
@@ -92,15 +99,19 @@ ol, ul {
 }
 
 #tutorialBox {
-  font-style: italic;
-  position: relative;
-  height: 5px;
-  opacity: 0;
+  visibility: hidden;
+} #tutorialBox.visible {
+  visibility: visible;
+    animation: fadeUp 1s forwards;
 }
 
-#tutorialBox.visible {
-  opacity: 1;
-  animation: tutorialBoxAppear 1s forwards;
+#steamHelp {
+  position: relative;
+  z-index: -4;
+  height: 0px;
+  transition: height 0.5s;
+} #steamHelp.visible {
+    height: 3em;
 }
 
 .header { background-color: #333; }
@@ -220,7 +231,7 @@ ol, ul {
   opacity: 0;
   transition: opacity 0.5s, left 0.5s;
 }
-.item.hovered .playLink {
+.gamelist > li.hovered .playLink {
   opacity: 1;
   left: 30px;
 }
