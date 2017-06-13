@@ -8,8 +8,6 @@ function constructGameItem(game){
   var library = game.library;
   li = document.createElement('li');
   
-  li.classList = 'item';
-  
   li.innerHTML = replaceAll(gameItemContents,
     '$name$', game.name, '$id$', game.id,
     '$size$', game.formattedSize, '$percent$', game.percentString,
