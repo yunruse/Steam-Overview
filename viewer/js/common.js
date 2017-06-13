@@ -1,5 +1,12 @@
 /* Useful functions */
 
+function classBool(element, cssClass /*, bool */){
+  var cL = element.classList;
+  if( arguments.length <= 2 ){ bool = !cL.contains(cssClass) }
+  else { bool = arguments[2] }
+  bool ?  cL.add(cssClass) : cL.remove(cssClass);
+}
+
 function replaceAll(string /*, find, replace, find2, replace2... */) {
   if( arguments.length <3 ){ return; }
   for( var i = 1; i < arguments.length; i += 2 ){

@@ -22,34 +22,28 @@ hintInterfaceLoop = function(){
 }
 
 hintInterfaceDisplay = function(game, state){
-  var lC = game.element.classList,
-      bC = game.barElement.classList,
-      pL = game.element.playLink;
+  var pL = game.element.playLink;
+  
+  classBool(game.element.playLink, 'smaller', state < 4)
+  classBool(tutorialBox, 'visible', state == 4)
+  
+  classBool(game.element, 'locked', state == 2)
+  classBool(game.barElement, 'locked', state == 2)
+  
+  classBool(game.element, 'hovered', state < 4)
+  classBool(game.barElement, 'hovered', state < 4)
   
   switch( state ){
-    case 3:
-      lC.remove('locked');
-      bC.remove('locked');
-      pL.classList.add('smaller');
-      pL.innerText = "[Games will display their potential size on other libraries]";
-      return 5000;
-    case 2:
-      lC.add('locked');
-      bC.add('locked');
-      pL.innerText = "[Click to lock in]";
-      return 5000;
     case 1:
-      lC.add('hovered');
-      bC.add('hovered');
       pL.innerText = "[Mouseover to see info]";
       return 3000;
-    default:
-      lC.remove('locked');
-      bC.remove('locked');
-      lC.remove('hovered');
-      bC.remove('hovered');
-      pL.classList.remove('smaller');
-      tutorialBox.classList.add('visible');
+    case 2:
+      pL.innerText = "[Click to lock in]";
+      return 5000;
+    case 3:
+      pL.innerText = "[Scroll down to see size on other libraries]";
+      return 5000;
+    case 4:
       pL.innerText = "Play..."
       return "stop";
   }

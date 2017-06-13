@@ -4,11 +4,8 @@ function subtitleDisplay(message, isError) {
     return;
   }
   
-  if( (typeof isError) === 'undefined' || isError ){
-    subtitle.classList.add('error');
-  } else {
-    subtitle.classList.remove('error')
-  }
+  classBool(subtitle, 'error',
+    (typeof isError) === 'undefined' || isError );
   subtitle.innerHTML = message;
 }
 
