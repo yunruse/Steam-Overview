@@ -37,9 +37,10 @@ hintInterfaceDisplay = function(state){
       others = gameBindings.tutorialShadowElements,
       pL = game.element.playLink;
   
+  // When in tutorial, toggle certain states
   classBool(state < 4, 'shadowed', ...others)
   classBool(state < 4, 'smaller', game.element.playLink)
-  classBool(state == 4, 'visible', tutorialBox)
+  classBool(state < 4, 'hidden', tutorialBox)
   
   classBool(state == 2, 'locked', game.element, game.barElement)
   classBool(state < 4, 'hovered', game.element, game.barElement)

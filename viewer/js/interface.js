@@ -32,5 +32,4 @@ window.onload = function(){
     throw e;
   }
   displayTimeSince();
-  setTimeout(startTutorial, 1500);
 }

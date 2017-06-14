@@ -92,20 +92,10 @@ ol, ul {
   transition: height 0.5s;
 }
 
-@keyframes fadeUp {
-  from {
-    top: 20px;
-    opacity: 0;
-  } to {
-    top: 0px;
-  }
-}
-
 #tutorialBox {
-  visibility: hidden;
-} #tutorialBox.visible {
-  visibility: visible;
-    animation: fadeUp 1s forwards;
+  transition: opacity 0.5s;
+} #tutorialBox.hidden {
+    opacity: 0;
 }
 
 #steamHelp {
