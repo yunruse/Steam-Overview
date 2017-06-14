@@ -30,8 +30,12 @@ a {
   transition: color 0.1s ease;
 }
 
-a:hover{
+a:hover {
   color: #ffa74e;
+}
+
+a[onclick] {
+  cursor: pointer;
 }
 
 h1, h2 {
