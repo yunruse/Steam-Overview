@@ -199,7 +199,7 @@ ol, ul {
   padding-left: 10px;
   background-color: #555;
   transition-duration: 0.5s;
-  transition-property: padding-left, margin-left, margin-right, background-color, color;
+  transition-property: padding-left, margin-left, margin-right, background-color, color, opacity, filter;
   position: relative;
 }
 
@@ -209,7 +209,7 @@ ol, ul {
 .meta.used { background-color: hsl(210, 50%, 30%); }
 .meta.allGames { background-color: hsl(270, 50%, 30%); }
 
-.gamelist > li:not(.locked):nth-child(even) {
+.gamelist > li:nth-child(even) {
   background-color: #444;
 }
 .gamelist > li:not(.locked).hovered {
@@ -224,6 +224,11 @@ ol, ul {
   margin-right: 30px;
   background-color: hsl(340, 50%, 30%);
   color: white;
+}
+
+.gamelist > li.shadowed {
+  opacity: 0.5;
+  filter: grayscale(100%) blur(2px);
 }
 
 .col1, .col2 { position: absolute; text-align: right;}

@@ -1,10 +1,9 @@
-var gameBindings = {},
-    gameBindingsLength = 0;
+var gameBindings = { "length": 0 };
 
 function bindGame(game){
-  game.bindingID = gameBindingsLength;
+  game.bindingID = gameBindings.length;
   gameBindings[game.bindingID] = game;
-  gameBindingsLength++
+  gameBindings.length++
   
   game.element.onmouseover = function(){ gameSelect(game, true, false)};
   game.element.onmouseout = function(){ gameSelect(game, false, false)};

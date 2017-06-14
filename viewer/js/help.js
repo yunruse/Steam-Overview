@@ -4,30 +4,40 @@ toggleSteamHelp = function() {
 
 /* Automatic (and manual) tutorial */
 
-var hintInterfaceState;
+var hintInterfaceState, hintInterfaceOthers;
 
 startTutorial = function(){
+  if( gameBindings.length === 0 ){ return; }
+  
+  var hintBindingID = Math.min(3, Math.floor(gameBindings.length / 2));
+  gameBindings.tutorialShown = gameBindings[hintBindingID];
+  
+  otherGames = [];
+  for( var i = 0; i < gameBindings.length; i++ ){
+    if( i == hintBindingID ){ continue; }
+    otherGames.push(gameBindings[i].element);
+  }
+  gameBindings.tutorialShadowElements = otherGames;
+  
   hintInterfaceState = 1;
   hintInterfaceLoop();
 }
 
-hintInterfaceLoop = function(){
-  if( gameBindingsLength === 0 ){
-    return;
-  }
-  var hintBindingID = Math.min(3, Math.floor(gameBindingsLength / 2))
-      game = gameBindings[hintBindingID];
-  
-  var timeToWait = hintInterfaceDisplay(game, hintInterfaceState);
+hintInterfaceLoop = function(){  
+  var timeToWait = hintInterfaceDisplay(hintInterfaceState);
   // carries out and returns time to wait
+  
   if( timeToWait === "stop" ){ return; }
   setTimeout(hintInterfaceLoop, timeToWait);
   hintInterfaceState++;
 }
 
-hintInterfaceDisplay = function(game, state){
-  var pL = game.element.playLink;
+hintInterfaceDisplay = function(state){
+  var game = gameBindings.tutorialShown,
+      others = gameBindings.tutorialShadowElements,
+      pL = game.element.playLink;
   
+  classBool(state < 4, 'shadowed', ...others)
   classBool(state < 4, 'smaller', game.element.playLink)
   classBool(state == 4, 'visible', tutorialBox)
   
