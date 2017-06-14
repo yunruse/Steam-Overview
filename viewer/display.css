@@ -71,6 +71,9 @@ ol, ul {
 
 #title:hover > img {
   filter: hue-rotate(-160deg);
+}
+
+#title > img:hover{
   transform: rotate(360deg);
 }
 
