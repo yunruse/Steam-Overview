@@ -4,11 +4,11 @@ __ver__ = '1.1'
 PRODUCTION = True
 
 import os
+from pathlib import Path
 import re
 import shutil
 import json
 
-import file
 import steamfile
 
 if __name__ == '__main__':
@@ -28,27 +28,25 @@ class Game:
         self.size = int(info.get('SizeOnDisk', 0))
 
         if 'installdir' in info:
-            steamapps = os.path.split(path)[0]
-            dirpath = file.path(steamapps, 'common', self.directory)
-            self.size = file.dirsize(dirpath).totalSize
+            dirpath = Path(os.path.split(path)[0]) / 'common' / self.directory
+            self.size = steamfile.dirsize(dirpath).totalSize
 
 class Library:
     __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
     
     def __init__(self, path):
         '''List of games, given path to library (NOT /steamapps).'''
-        self.path = file.path(path)
+        self.path = Path(path).as_posix()
         self.games = []
         
-        gamespath = file.path(path, 'steamapps')
+        gamespath = Path(path) / 'steamapps'
         for i in os.listdir(gamespath):
             if i.startswith('appmanifest_') and i.endswith('.acf'):
-                i = file.path(gamespath, i)
-                self.games.append(Game(i))
+                self.games.append(Game(gamespath / i))
 
         self.games.sort(key=lambda g: g.size, reverse=True)
         
-        self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(path)
+        self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(str(path))
         self.sizeFree = self.sizeTotal - self.sizeUsed
         
         self.sizeGames = sum(game.size for game in self.games)
@@ -104,7 +102,7 @@ def _main():
         _json = json.dumps(libraries, indent=1, default=slottableToDict)
         f.write(FORMAT.format(__ver__, time.time(), _json))
     
-    viewer = file.path(os.getcwd(), 'viewer', 'viewer.html')
+    viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
     webbrowser.open_new_tab(viewer)
 
 if __name__ == '__main__':    

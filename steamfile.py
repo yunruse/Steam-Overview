@@ -2,14 +2,54 @@
 
 '''Steam-specific path and file functions.'''
 
+import collections
 import os
+from pathlib import Path
 import re
+import sys
 import string
-
-import file
 
 __dir__ = ('readSteamFile', 'isSteamLibrary', 'isSteamBase', 'getLibraryPaths')
 
+size = collections.namedtuple('size', 'totalSize fileCount')
+def dirsize(path):
+    '''Get bytes used by directory and amount of files.
+    
+    > dirsize('/path/to/directory/')
+    size(134240, 27)
+    > dirsize('/path/to/file.txt')
+    size(5836, 1)
+    > dirsize('notanactualfile')
+    size(0, 0)'''
+    
+    if not os.path.exists(path):
+        return size(0, 0)
+    elif os.path.isfile(path):
+        try:
+            return size(os.lstat(path).st_size, 1)
+        except os.error:
+            return size(0, 1)
+    
+    totalSize = 0
+    seen = set()
+    
+    for dirpath, dirs, files in os.walk(path):
+        for file in files:
+            file = os.path.join(dirpath, file)
+            
+            try:
+                stat = os.lstat(file)
+            except os.error:
+                continue
+            
+            if stat.st_ino in seen:
+                continue
+            else:
+                seen.add(stat.st_ino)
+            
+            totalSize += stat.st_size
+    
+    return size(totalSize, len(seen))
 
 def readSteamFile(path):
     '''Scrapes top-level information from Steam-formatted ACF or VDF file as dictionary.
@@ -33,15 +73,14 @@ def readSteamFile(path):
 def isSteamLibrary(path):
     '''Return True if the path is a valid Steam library, containing /steamapps/common/'''
     
-    steamapps = file.path(path, 'steamapps', 'common')
-    return os.path.isdir(steamapps)
+    steamapps = Path(path) / 'steamapps' / 'common'
+    return steamapps.is_dir()
 
 def isSteamBase(path):
     '''Return True if the path is the base Steam library, containing /steamapps/libraryfolders.vdf'''
     
-    path = file.path(path)
-    folders = file.path(path, 'steamapps', 'libraryfolders.vdf')
-    return isSteamLibrary(path) and os.path.isfile(folders)
+    vdf = Path(path) / 'steamapps' / 'libraryfolders.vdf'
+    return isSteamLibrary(path) and vdf.is_file()
 
 # extremely OS-dependant steamBaseFinder()
 
@@ -79,11 +118,12 @@ if os.name == 'nt':
         progfileKeys = ('ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432')
         for i in progfileKeys:
             if i in os.environ:
-                yield file.path(os.environ[i], 'Steam')
+                yield Path(os.environ[i]) / 'Steam'
         
-        for letter in driveLetters:
-            yield file.path(a, 'Program Files', 'Steam')
-            yield file.path(a, 'Program Files (x86)', 'Steam')
+        for a in driveLetters:
+            a = Path(a)
+            yield a / 'Program Files' / 'Steam'
+            yield a / 'Program Files (x86)' / 'Steam'
      
 else:
     _UNIXBASES = (
@@ -93,7 +133,7 @@ else:
     )
     def steamBaseFinder():
         for i in _UNIXBASES:
-            yield os.path.expanduser(i)
+            yield Path(i).expanduser()
 
 def getSteamBase():
     for path in steamBaseFinder():
@@ -108,13 +148,10 @@ def getLibraryPaths(base=None):
         base = getSteamBase()
         if base is None: #it feels wrong doing that twice
             return []
-
-    vdfPath = file.path(base, 'steamapps', 'libraryfolders.vdf')
+    
     try:
-        vdf = readSteamFile(vdfPath)
+        vdf = readSteamFile(Path(base) / 'steamapps' / 'libraryfolders.vdf')
     except FileNotFoundError:
         return []
-
-    paths = [base] + vdf['_list']
     
-    return [file.path(i) for i in paths]
+    return [base] + vdf['_list']
