@@ -1,3 +1,7 @@
+toggleSteamHelp = function() {
+  classBool(!steamHelp.classList.contains('visible'), 'visible', steamHelp)
+}
+
 /* Automatic (and manual) tutorial */
 
 var hintInterfaceState;
@@ -24,14 +28,11 @@ hintInterfaceLoop = function(){
 hintInterfaceDisplay = function(game, state){
   var pL = game.element.playLink;
   
-  classBool(game.element.playLink, 'smaller', state < 4)
-  classBool(tutorialBox, 'visible', state == 4)
+  classBool(state < 4, 'smaller', game.element.playLink)
+  classBool(state == 4, 'visible', tutorialBox)
   
-  classBool(game.element, 'locked', state == 2)
-  classBool(game.barElement, 'locked', state == 2)
-  
-  classBool(game.element, 'hovered', state < 4)
-  classBool(game.barElement, 'hovered', state < 4)
+  classBool(state == 2, 'locked', game.element, game.barElement)
+  classBool(state < 4, 'hovered', game.element, game.barElement)
   
   switch( state ){
     case 1:

@@ -4,8 +4,8 @@ function subtitleDisplay(message, isError) {
     return;
   }
   
-  classBool(subtitle, 'error',
-    (typeof isError) === 'undefined' || isError );
+  classBool( (typeof isError) === 'undefined' || isError,
+    'error', subtitle);
   subtitle.innerHTML = message;
 }
 

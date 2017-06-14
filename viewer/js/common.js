@@ -1,10 +1,10 @@
 /* Useful functions */
 
-function classBool(element, cssClass /*, bool */){
-  var cL = element.classList;
-  if( arguments.length <= 2 ){ bool = !cL.contains(cssClass) }
-  else { bool = arguments[2] }
-  bool ?  cL.add(cssClass) : cL.remove(cssClass);
+function classBool(bool, cssClass /*, element, element2, ... */){
+  for( var i = 2; i < arguments.length; i++ ){
+    var cL = arguments[i].classList;
+    bool ? cL.add(cssClass) : cL.remove(cssClass);
+  }
 }
 
 function replaceAll(string /*, find, replace, find2, replace2... */) {
