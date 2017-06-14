@@ -106,11 +106,15 @@ ol, ul {
 }
 
 #steamHelp {
-  position: relative;
+  /* Hide behind any library */
+  left: 1px;
   z-index: -4;
+  position: relative;
   height: 0px;
-  transition: height 0.5s;
+  opacity: 0;
+  transition: height 0.5s, opacity 0.3s;
 } #steamHelp.visible {
+    opacity: 1;
     height: 3em;
 }
 
