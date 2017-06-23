@@ -116,6 +116,7 @@ ol, ul {
   z-index: -4;
   position: relative;
   transition: height 0.5s, opacity 0.3s;
+} .infoTab:not(.visible) {
     opacity: 0;
     height: 0px;
 }
@@ -214,7 +215,7 @@ ol, ul {
 .gamelist > li:nth-child(even) {
   background-color: #444;
 }
-.gamelist > li:not(.locked).hovered {
+.gamelist > li:not(.locked):not(.shadowed).hovered {
   padding-left: 20px;
   background-color: hsl(300, 50%, 30%);
   color: white;
@@ -245,7 +246,7 @@ ol, ul {
   opacity: 0;
   transition: opacity 0.5s, left 0.5s;
 }
-.gamelist > li.hovered .playLink {
+.gamelist > li:not(.shadowed).hovered .playLink {
   opacity: 1;
   left: 30px;
 }
