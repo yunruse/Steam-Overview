@@ -1,5 +1,7 @@
-toggleSteamHelp = function() {
-  classBool(!steamHelp.classList.contains('visible'), 'visible', steamHelp)
+toggle = function(item, caller) {
+  var makeVisible = !item.classList.contains('visible')
+  classBool(makeVisible, 'visible', item)
+  classBool(makeVisible, 'hovered', caller)
 }
 
 /* Automatic (and manual) tutorial */

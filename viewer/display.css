@@ -30,7 +30,7 @@ a {
   transition: color 0.1s ease;
 }
 
-a:hover {
+a:hover, a.hovered {
   color: #ffa74e;
 }
 
@@ -110,18 +110,18 @@ ol, ul {
     opacity: 0;
 }
 
-#steamHelp {
+.infoTab {
   /* Hide behind any library */
   left: 1px;
   z-index: -4;
   position: relative;
-  height: 0px;
-  opacity: 0;
   transition: height 0.5s, opacity 0.3s;
-} #steamHelp.visible {
-    opacity: 1;
-    height: 3em;
+    opacity: 0;
+    height: 0px;
 }
+
+#license.visible { height: 25em; }
+#steamHelp.visible { height: 4em; }
 
 .header { background-color: #333; }
 
