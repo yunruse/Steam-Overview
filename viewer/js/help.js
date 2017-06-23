@@ -40,7 +40,6 @@ startTutorial = function(){
 }
 
 hintInterfaceDisplay = function(state, timeStarted){
-  console.log(state, timeStarted % 1000, tutorialTimeStarted % 1000)
   if( tutorialTimeStarted !== timeStarted ){ return; } // manually stopped
   
   var game = gameBindings.tutorialShown,
