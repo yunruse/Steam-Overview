@@ -32,4 +32,5 @@ window.onload = function(){
     throw e;
   }
   displayTimeSince();
+  setupTutorial()
 }
