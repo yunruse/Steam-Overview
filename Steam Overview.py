@@ -95,6 +95,8 @@ def _main():
             log('{} found.'.format(len(lib.games)))
         else:
             log('No games found, ignoring.')
+
+    libraries.sort(key=lambda l: l.sizeTotal)
     
     log('Done, passing to `viewer/viewer.html`...')
     
