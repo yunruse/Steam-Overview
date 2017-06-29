@@ -111,18 +111,18 @@ ol, ul {
 }
 
 .infoTab {
-  /* Hide behind any library */
-  left: 1px;
-  z-index: -4;
   position: relative;
-  transition: height 0.5s, opacity 0.3s;
+  top: 0px;
+  z-index: -4;
+  transition: height 0.5s, top 0.5s, opacity 0.3s;
 } .infoTab:not(.visible) {
-    opacity: 0;
     height: 0px;
+    top: 30px;
+    opacity: 0;
 }
 
-#license.visible { height: 25em; }
-#steamHelp.visible { height: 4em; }
+#tabLicense.visible { height: 25em; }
+#tabSteam.visible { height: 4em; }
 
 .header { background-color: #333; }
 

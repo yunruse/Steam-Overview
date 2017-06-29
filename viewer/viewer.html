@@ -26,28 +26,31 @@
     <img src="icon.png"/>
     <h1>Steam Overview</h1>
   </a>
-  <h2 id=subtitle class='error'>
+  
+  <h2 class='error' id=subtitle>
     Where <code>Steam Overview.py</code> generates the data, SO's
     JavaScript turns it into information. Please enable it in your browser.
   </h2>
   
   <p class='info'>
     <b>Help:</b>
-    <a onclick="toggle(steamHelp, this)">[How do I manage Steam games?]</a>
-    <a onclick="toggle(license, this)">[License]</a>
-    <a id=tutorialBox onclick='startTutorial()'><b>[See tutorial]</b></a>
+    <a class='infoTabSelector' onclick="toggle('tabSteam', this)">[How do I manage Steam games?]</a>
+    <a class='infoTabSelector' onclick="toggle('tabLicense', this)">[License]</a>
+    <a onclick='startTutorial()' id=tutorialBox><b>[See tutorial]</b></a>
   </p>
   
-  <p id=steamHelp class='infoTab'>
-    <br/>
+  <div class='infoTab' id='tabSteam'>
+    <h3>Managing games in steam</h3>
+    <p>
     — <b>To manage game libraries</b>:
       <i>Steam → Settings → Downloads → Steam Library Folders</i>.
-    <br/>
+      <br/>
     — <b>To backup, uninstall, verify, browse or move a game</b>:
       <i>Right click → Properties → Local Files.</i>
-  </p>
+    </p>
+  </div>
   
-  <div id=license class='infoTab'>
+  <div class='infoTab' id='tabLicense'>
     <h3>Copyright (c) Jack Dobson 2017.</h3>
     <p>
       Permission  is  hereby   granted,   free  of  charge,   to  any   person  and/or
@@ -73,6 +76,7 @@
       software.
     </b></p>
   </div>
+  
   <ol id=libraryList></ol>
 </div>
 </body>
