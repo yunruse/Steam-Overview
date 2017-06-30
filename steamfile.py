@@ -101,12 +101,12 @@ if os.name == 'nt':
                 pass
     
     try:
-        import win32file
+        from ctypes import windll
     except ModuleNotFoundError:
         pass
     else:
         def _doesDriveExist(letter):
-            return (win32file.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0
+            return (windll.kernel32.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0
 
         driveLetters = [a + ':/' for a in string.ascii_uppercase if _doesDriveExist(a)]
     
