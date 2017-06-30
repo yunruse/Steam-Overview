@@ -122,6 +122,7 @@ if os.name == 'nt':
         
         for a in driveLetters:
             a = Path(a)
+            yield a / 'Steam'
             yield a / 'Program Files' / 'Steam'
             yield a / 'Program Files (x86)' / 'Steam'
      
