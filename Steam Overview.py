@@ -121,6 +121,7 @@ if __name__ == '__main__':
         try:
             _main()
         except Exception as e:
-            print("\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
+            log("\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
                 type(e).__name__, ', '.join(e.args) ))
+            input('The error will be logged in log.txt. Press any key to exit...')
             raise
