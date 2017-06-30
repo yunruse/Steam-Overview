@@ -66,7 +66,7 @@ def _getPaths(log):
             print("installed? Please check you have libraryfolders.vdf at your path.")
         
         attempts += 1
-        paths = getLibraryPaths(input("~ "))
+        paths = steamfile.getLibraryPaths(input("~ "))
     
     if attempts == 0:
         log("Found Steam installed at '{}'".format(paths[0]))
