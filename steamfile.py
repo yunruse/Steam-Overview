@@ -136,17 +136,18 @@ else:
         for i in _UNIXBASES:
             yield Path(i).expanduser()
 
-def getSteamBase():
+def getSteamBase(log=lambda path: None):
     for path in steamBaseFinder():
+        log(str(path))
         if path and isSteamBase(path):
             return path
     else:
         return None
 
-def getLibraryPaths(base=None):
+def getLibraryPaths(base=None, log=lambda path: None):
     '''Returns a list of paths to Steam libraries found. If 'base' is not provided it will be found.'''
     if base is None:
-        base = getSteamBase()
+        base = getSteamBase(log)
         if base is None: #it feels wrong doing that twice
             return []
     

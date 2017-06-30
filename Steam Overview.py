@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 __ver__ = '1.1'
-PRODUCTION = True
 
 import os
 from pathlib import Path
@@ -54,7 +53,8 @@ class Library:
 # Main program
 
 def _getPaths(log):
-    paths = steamfile.getLibraryPaths()
+    logPath = lambda path: log('Trying {}'.format(path))
+    paths = steamfile.getLibraryPaths(None, logPath)
     attempts = 0
     while len(paths) == 0:
         # Slightly conversational because if you're here, something's wrong
@@ -66,10 +66,10 @@ def _getPaths(log):
             print("installed? Please check you have libraryfolders.vdf at your path.")
         
         attempts += 1
-        paths = steamfile.getLibraryPaths(input("~ "))
+        paths = steamfile.getLibraryPaths(input("~ "), logPath)
     
     if attempts == 0:
-        log("Found Steam installed at '{}'".format(paths[0]))
+        log("Found install path.")
 
     return paths
 
