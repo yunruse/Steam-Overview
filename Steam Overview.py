@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__ver__ = '1.1'
+__ver__ = '1.2'
 
 import os
 from pathlib import Path
