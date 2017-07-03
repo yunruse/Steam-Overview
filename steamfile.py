@@ -57,7 +57,7 @@ def readSteamFile(path):
     Any numerical indexes are placed into dict['_list'].'''
     
     info = {'_list': []}
-    with open(path, encoding='utf8') as file:
+    with open(str(path), encoding='utf8') as file:
         for line in file.readlines():
             result = re.findall(r'^\t"(.+?)"\t\t"(.+?)"', line)
             if not result:
