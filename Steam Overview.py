@@ -61,9 +61,9 @@ def _getPaths(log):
         if attempts == 0:
             log("Couldn't automatically find Steam install directory.")
             print("Sorry about that. Please provide a path:")
-        elif attempts <= 2:
-            print("Sorry, I couldn't find anything there. Are you sure you have Steam")
-            print("installed? Please check you have libraryfolders.vdf at your path.")
+        elif attempts == 1:
+            print("Still couldn't find anything, sorry. The install directory should contain")
+            print("the Steam program alongside 'steamapps/libraryfolders.vdf'.)")
         
         attempts += 1
         paths = steamfile.getLibraryPaths(input("~ "), logPath)
