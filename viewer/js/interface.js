@@ -4,31 +4,34 @@ function subtitleDisplay(message, isError) {
     return;
   }
   
-  classBool( (typeof isError) === 'undefined' || isError,
-    'error', subtitle);
+  classBool(isError, 'error', subtitle);
   subtitle.innerHTML = message;
 }
 
 function displayTimeSince() {
-  var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved,
-      needsRerun = (timeSince >= 30 * 60),
-      interval = 'now';
+  var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved
   
   if( timeSince >= 60){
-    interval = roundDecimals(timeSince / 60, 0) + " minutes ago" + 
-      (needsRerun ? " (please rerun <code>Steam Overview.py</code>)" : "");
+    var minutes = roundDecimals(timeSince / 60, 0),
+        timeText = "Last updated " + minutes + " minutes ago",
+        needsRerun = (timeSince >= 30 * 60);
+    if( needsRerun ){
+      timeText += " (please rerun <code>Steam Overview.py</code>)"
+    }
+    subtitleDisplay(timeText, needsRerun)
+  } else {
+    // updated in last minute, do not display
+    subtitle.classList.add('hidden')
   }
-  
-  subtitleDisplay("Last updated " + interval, needsRerun);
 }
 
 window.onload = function(){
   try{ libraries } catch(e) {
-    subtitleDisplay("I couldn't find a libraries.js file. Did you run <code>Steam Overview.py</code>?");
+    subtitleDisplay("I couldn't find a libraries.js file. Did you run <code>Steam Overview.py</code>?", true);
     return;
   }
   try{ constructLibraryList(); } catch (e) {
-    subtitleDisplay("Internal Javascript error:</br><code>" + e + "</code>");
+    subtitleDisplay("Internal Javascript error:</br><code>" + e + "</code>", true);
     throw e;
   }
   displayTimeSince();
