@@ -156,4 +156,4 @@ def getLibraryPaths(base=None, log=lambda path: None):
     except FileNotFoundError:
         return []
     
-    return [base] + vdf['_list']
+    return [base] + [Path(i) for i in vdf['_list']]
