@@ -81,7 +81,9 @@ def isSteamLibrary(path):
     
     return isSteamBase(path) or (Path(path) / 'steamapps' / 'common').is_dir()
 
+#
 # extremely OS-dependant steamBaseFinder()
+# 
 
 if os.name == 'nt':
     registryPath = None

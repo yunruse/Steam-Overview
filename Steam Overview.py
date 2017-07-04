@@ -50,7 +50,9 @@ class Library:
         
         self.sizeGames = sum(game.size for game in self.games)
 
+#
 # Main program
+#
 
 def _getPaths(log):
     logPath = lambda path: log('Trying {}'.format(path))
@@ -74,10 +76,10 @@ def _getPaths(log):
     return paths
 
 FORMAT = '''\
-/* Steam Overview {} */
+/* Steam Overview %s */
 
 var lastRetrieved = {},
-    libraries = {};'''
+    libraries = {};''' % __ver__
 
 slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slots__}
 
@@ -102,7 +104,7 @@ def _main():
     
     with open('libraries.js', 'w') as f:
         _json = json.dumps(libraries, indent=1, default=slottableToDict)
-        f.write(FORMAT.format(__ver__, time.time(), _json))
+        f.write(FORMAT.format(time.time(), _json))
     
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
     webbrowser.open_new_tab(viewer)
@@ -111,12 +113,12 @@ if __name__ == '__main__':
     import time
     import webbrowser
 
-    with open('log.txt', 'w') as _log:
+    with open('log.txt', 'w') as LOGFILE:
         def log(text, prependTime=True):
             if prependTime:
                 text = time.strftime('%H:%M:%S ') + text
             print(text)
-            print(text, file=_log)
+            print(text, file=LOGFILE)
         
         try:
             _main()
