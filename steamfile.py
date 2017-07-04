@@ -69,18 +69,15 @@ def readSteamFile(path):
                 info[key] = value
     return info
 
+def isSteamBase(path):
+    '''Return True if the path is the base Steam library, containing /steamapps/libraryfolders.vdf'''
+    
+    return (Path(path) / 'steamapps' / 'libraryfolders.vdf').is_file()
 
 def isSteamLibrary(path):
     '''Return True if the path is a valid Steam library, containing /steamapps/common/'''
     
-    steamapps = Path(path) / 'steamapps' / 'common'
-    return steamapps.is_dir() or isSteamBase(path)
-
-def isSteamBase(path):
-    '''Return True if the path is the base Steam library, containing /steamapps/libraryfolders.vdf'''
-    
-    vdf = Path(path) / 'steamapps' / 'libraryfolders.vdf'
-    return vdf.is_file()
+    return isSteamBase(path) or (Path(path) / 'steamapps' / 'common').is_dir()
 
 # extremely OS-dependant steamBaseFinder()
 
