@@ -51,6 +51,8 @@ def dirsize(path):
     
     return size(totalSize, len(seen))
 
+STEAMENTRY = re.compile(r'^\t"(.+?)"\t\t"(.+?)"')
+
 def readSteamFile(path):
     '''Scrapes top-level information from Steam-formatted ACF or VDF file as dictionary.
     
@@ -59,7 +61,7 @@ def readSteamFile(path):
     info = {'_list': []}
     with open(str(path), encoding='utf8') as file:
         for line in file.readlines():
-            result = re.findall(r'^\t"(.+?)"\t\t"(.+?)"', line)
+            result = STEAMENTRY.findall(line)
             if not result:
                 continue
             key, value = result[0]
