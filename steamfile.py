@@ -93,12 +93,11 @@ if os.name == 'nt':
     except ModuleNotFoundError:
         pass
     else:
-        def consultRegistry():
-            try:
-                with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
-                    return winreg.QueryValueEx(key, 'SteamPath')[0]
-            except FileNotFoundError:
-                pass
+        try:
+            with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
+                registryPath = winreg.QueryValueEx(key, 'SteamPath')[0]
+        except FileNotFoundError:
+             pass
     
     try:
         from ctypes import windll
