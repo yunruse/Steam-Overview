@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+'''Steam Overview main script, handling input, error handling, logging and output.'''
+
 __ver__ = '1.2.1'
 
 import json
