@@ -162,20 +162,23 @@ def getLibraryPaths(base=None, log=lambda path: None):
     return [base] + [Path(i) for i in vdf['_list']]
 
 class Game:
-    __slots__ = ['id', 'directory', 'name', 'size']
+    __slots__ = ['id', 'name', 'sizeEstimate', 'installpath', 'size']
     
     def __init__(self, path):
         '''Game, given path to ACF reference.'''
         info = readSteamFile(path)
         
         self.id = info.get('appid', None)
-        self.directory = info.get('installdir', None)
-        self.name = info.get('name', self.directory)
-        self.size = int(info.get('SizeOnDisk', 0))
+        self.sizeEstimate = int(info.get('SizeOnDisk', 0))
+        self.size = None
 
-        if 'installdir' in info:
-            dirpath = Path(os.path.split(path)[0]) / 'common' / self.directory
-            self.size = dirsize(dirpath).totalSize
+        installdir = info.get('installdir', None)
+        self.name = info.get('name', installdir)
+        self.installpath = Path(os.path.split(path)[0]) / 'common' / installdir
+    
+    def getSize(self):
+        if self.size is None:
+            self.size = dirsize(self.installpath).totalSize
 
 class Library:
     __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
@@ -189,10 +192,13 @@ class Library:
         for i in os.listdir(gamespath):
             if i.startswith('appmanifest_') and i.endswith('.acf'):
                 self.games.append(Game(gamespath / i))
-
-        self.games.sort(key=lambda g: g.size, reverse=True)
         
         self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(str(path))
         self.sizeFree = self.sizeTotal - self.sizeUsed
-        
+        self.sizeGames = 0
+    
+    def getSize(self):
+        for game in self.games:
+            game.getSize()
+        self.games.sort(key=lambda g: g.size, reverse=True)
         self.sizeGames = sum(game.size for game in self.games)

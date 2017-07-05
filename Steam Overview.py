@@ -47,11 +47,17 @@ def _main(log):
     
     libraries = []
     for path in paths:
-        log('Finding games at {}...'.format(path))
+        log('Finding games at {}... '.format(path))
         lib = steamfile.Library(path)
+        
         if len(lib.games):
             libraries.append(lib)
-            log('{} found.'.format(len(lib.games)))
+            log('{} found, getting sizes'.format(len(lib.games)), end='')
+            for game in lib.games:
+                game.getSize()
+                log('.', prependTime=False, end='')
+            log()
+            lib.getSize()
         else:
             log('No games found, ignoring.')
 
