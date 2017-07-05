@@ -29,7 +29,7 @@ def _getPaths(log):
     
     if attempts == 0:
         log("Found Steam install path.")
-
+    
     return paths
 
 FORMAT = '''\
@@ -59,7 +59,7 @@ def _main(log):
             lib.getSize()
         else:
             log('No games found, ignoring')
-
+    
     libraries.sort(key=lambda l: l.sizeTotal)
     
     log('Done, passing to `viewer/viewer.html`…')
@@ -74,12 +74,13 @@ def _main(log):
 def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
     if not FILES:
         FILES = (sys.stdout, )
+    
     def log(text='', prependTime=True, *args, **kwargs):
         if text and prependTime:
             text = time.strftime(TIMEFORMAT) + text
         for f in FILES:
             print(text, file=f, **kwargs)
-
+    
     return log
 
 if __name__ == '__main__':    

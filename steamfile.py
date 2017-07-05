@@ -113,7 +113,6 @@ if os.name == 'nt':
     
         driveLetters = [a + ':/' for a in string.ascii_uppercase if _doesDriveExist(a)]
     
-    
     def steamBaseFinder():
         if registryPath is not None:
             yield registryPath
@@ -171,7 +170,7 @@ class Game:
         self.id = info.get('appid', None)
         self.sizeEstimate = int(info.get('SizeOnDisk', 0))
         self.size = None
-
+    
         installdir = info.get('installdir', None)
         self.name = info.get('name', installdir)
         self.installpath = Path(os.path.split(path)[0]) / 'common' / installdir
