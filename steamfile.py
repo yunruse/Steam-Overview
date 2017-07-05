@@ -6,10 +6,12 @@ import collections
 import os
 from pathlib import Path
 import re
-import sys
 import string
+import shutil
 
-__dir__ = ('readSteamFile', 'isSteamLibrary', 'isSteamBase', 'getLibraryPaths')
+__dir__ = (
+    'dirsize', 'readSteamFile', 'isSteamLibrary', 'isSteamBase', 'getLibraryPaths',
+    'Game', 'Library')
 
 size = collections.namedtuple('size', 'totalSize fileCount')
 def dirsize(path):
@@ -157,3 +159,39 @@ def getLibraryPaths(base=None, log=lambda path: None):
         return []
     
     return [base] + [Path(i) for i in vdf['_list']]
+
+class Game:
+    __slots__ = ['id', 'directory', 'name', 'size']
+    
+    def __init__(self, path):
+        '''Game, given path to ACF reference.'''
+        info = readSteamFile(path)
+        
+        self.id = info.get('appid', None)
+        self.directory = info.get('installdir', None)
+        self.name = info.get('name', self.directory)
+        self.size = int(info.get('SizeOnDisk', 0))
+
+        if 'installdir' in info:
+            dirpath = Path(os.path.split(path)[0]) / 'common' / self.directory
+            self.size = dirsize(dirpath).totalSize
+
+class Library:
+    __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
+    
+    def __init__(self, path):
+        '''List of games, given path to library (NOT /steamapps).'''
+        self.path = Path(path).as_posix()
+        self.games = []
+        
+        gamespath = Path(path) / 'steamapps'
+        for i in os.listdir(gamespath):
+            if i.startswith('appmanifest_') and i.endswith('.acf'):
+                self.games.append(Game(gamespath / i))
+
+        self.games.sort(key=lambda g: g.size, reverse=True)
+        
+        self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(str(path))
+        self.sizeFree = self.sizeTotal - self.sizeUsed
+        
+        self.sizeGames = sum(game.size for game in self.games)
