@@ -69,8 +69,8 @@ def _main(log):
 def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
     if not FILES:
         FILES = (sys.stdout, )
-    def log(text, prependTime=True, *args, **kwargs):
-        if prependTime:
+    def log(text='', prependTime=True, *args, **kwargs):
+        if text and prependTime:
             text = time.strftime(TIMEFORMAT) + text
         for f in FILES:
             print(text, file=f, **kwargs)
