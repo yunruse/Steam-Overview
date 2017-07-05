@@ -21,7 +21,7 @@ def dirsize(path):
     size(5836, 1)
     > dirsize('notanactualfile')
     size(0, 0)'''
-    
+        
     if not os.path.exists(path):
         return size(0, 0)
     elif os.path.isfile(path):
@@ -107,7 +107,7 @@ if os.name == 'nt':
     else:
         def _doesDriveExist(letter):
             return (windll.kernel32.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0
-
+    
         driveLetters = [a + ':/' for a in string.ascii_uppercase if _doesDriveExist(a)]
     
     

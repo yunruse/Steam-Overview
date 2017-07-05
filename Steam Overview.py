@@ -49,7 +49,7 @@ class Library:
         self.sizeFree = self.sizeTotal - self.sizeUsed
         
         self.sizeGames = sum(game.size for game in self.games)
-
+        
 #
 # Main program
 #
@@ -87,7 +87,7 @@ def _main():
     log('\nSTEAM OVERVIEW VERSION {}\n'.format(__ver__), prependTime=False)
     log('Looking for Steam install directory...')
     paths = _getPaths(log)
-
+    
     libraries = []
     for path in paths:
         log('Finding games at {}...'.format(path))
@@ -112,7 +112,7 @@ def _main():
 if __name__ == '__main__':    
     import time
     import webbrowser
-
+    
     with open('log.txt', 'w') as LOGFILE:
         def log(text, prependTime=True):
             if prependTime:
