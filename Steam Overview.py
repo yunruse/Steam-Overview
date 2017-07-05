@@ -89,7 +89,8 @@ if __name__ == '__main__':
         try:
             _main(log)
         except Exception as e:
-            log("\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
-                type(e).__name__, ', '.join(e.args) ))
+            errmsg = "\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
+                type(e).__name__, ', '.join(e.args) )
+            log(errmsg, prependTime=False)
             input('The error will be logged in log.txt. Press any key to exit...')
             raise
