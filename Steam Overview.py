@@ -2,9 +2,12 @@
 
 __ver__ = '1.2'
 
+import json
 import os
 from pathlib import Path
-import json
+import sys
+import time
+import webbrowser
 
 import steamfile
 
@@ -64,9 +67,6 @@ def _main():
     webbrowser.open_new_tab(viewer)
 
 if __name__ == '__main__':    
-    import time
-    import webbrowser
-    
     with open('log.txt', 'w') as LOGFILE:
         def log(text, prependTime=True):
             if prependTime:
