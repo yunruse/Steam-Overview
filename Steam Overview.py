@@ -12,7 +12,7 @@ import webbrowser
 import steamfile
 
 def _getPaths(log):
-    logPath = lambda path: log('Trying {}'.format(path))
+    logPath = lambda path: log("Trying '{}'…".format(path))
     paths = steamfile.getLibraryPaths(None, logPath)
     attempts = 0
     while len(paths) == 0:
@@ -28,7 +28,7 @@ def _getPaths(log):
         paths = steamfile.getLibraryPaths(input("~ "), logPath)
     
     if attempts == 0:
-        log("Found install path.")
+        log("Found Steam install path.")
 
     return paths
 
@@ -42,12 +42,11 @@ slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slo
 
 def _main(log):
     log('\nSTEAM OVERVIEW VERSION {}\n'.format(__ver__), prependTime=False)
-    log('Looking for Steam install directory...')
     paths = _getPaths(log)
     
     libraries = []
     for path in paths:
-        log('Finding games at {}... '.format(path))
+        log("Finding games at '{}'… ".format(path))
         lib = steamfile.Library(path)
         
         if len(lib.games):
@@ -59,11 +58,11 @@ def _main(log):
             log()
             lib.getSize()
         else:
-            log('No games found, ignoring.')
+            log('No games found, ignoring')
 
     libraries.sort(key=lambda l: l.sizeTotal)
     
-    log('Done, passing to `viewer/viewer.html`...')
+    log('Done, passing to `viewer/viewer.html`…')
     
     with open('libraries.js', 'w') as f:
         _json = json.dumps(libraries, indent=1, default=slottableToDict)
@@ -92,5 +91,5 @@ if __name__ == '__main__':
             errmsg = "\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
                 type(e).__name__, ', '.join(e.args) )
             log(errmsg, prependTime=False)
-            input('The error will be logged in log.txt. Press any key to exit...')
+            input('The error will be logged in log.txt. Press any key to exit…')
             raise
