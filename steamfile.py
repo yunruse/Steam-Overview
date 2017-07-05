@@ -61,7 +61,8 @@ def readSteamFile(path):
     Any numerical indexes are placed into dict['_list'].'''
     
     info = {'_list': []}
-    with open(str(path), encoding='utf8') as file:
+    path = Path(path)
+    with path.open(encoding='utf8') as file:
         for line in file.readlines():
             result = STEAMENTRY.findall(line)
             if not result:
