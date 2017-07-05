@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-__ver__ = '1.2'
+__ver__ = '1.2.1'
 
 import json
 import os
