@@ -83,7 +83,7 @@ def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
     return log
 
 if __name__ == '__main__':    
-    with open('log.txt', 'w') as LOGFILE:
+    with open('log.txt', 'w', encoding='utf8') as LOGFILE:
         log = Logger(sys.stdout, LOGFILE)
         try:
             _main(log)
