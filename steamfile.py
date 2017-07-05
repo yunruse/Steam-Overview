@@ -122,10 +122,10 @@ if os.name == 'nt':
         
         for a in driveLetters:
             a = Path(a)
-            yield a / 'Steam'
-            yield a / 'Program Files' / 'Steam'
             yield a / 'Program Files (x86)' / 'Steam'
-     
+            yield a / 'Program Files' / 'Steam'
+            yield a / 'Steam'
+
 else:
     _UNIXBASES = (
         '~/Library/Application Support/Steam/', #macOS
