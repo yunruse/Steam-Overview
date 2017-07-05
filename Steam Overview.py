@@ -40,7 +40,7 @@ var lastRetrieved = {},
 
 slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slots__}
 
-def _main():
+def _main(log):
     log('\nSTEAM OVERVIEW VERSION {}\n'.format(__ver__), prependTime=False)
     log('Looking for Steam install directory...')
     paths = _getPaths(log)
@@ -66,16 +66,22 @@ def _main():
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
     webbrowser.open_new_tab(viewer)
 
+def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
+    if not FILES:
+        FILES = (sys.stdout, )
+    def log(text, prependTime=True, *args, **kwargs):
+        if prependTime:
+            text = time.strftime(TIMEFORMAT) + text
+        for f in FILES:
+            print(text, file=f, **kwargs)
+
+    return log
+
 if __name__ == '__main__':    
     with open('log.txt', 'w') as LOGFILE:
-        def log(text, prependTime=True):
-            if prependTime:
-                text = time.strftime('%H:%M:%S ') + text
-            print(text)
-            print(text, file=LOGFILE)
-        
+        log = Logger(sys.stdout, LOGFILE)
         try:
-            _main()
+            _main(log)
         except Exception as e:
             log("\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
                 type(e).__name__, ', '.join(e.args) ))
