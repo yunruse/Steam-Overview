@@ -160,14 +160,19 @@ def getLibraryPaths(base=None, log=lambda path: None):
     
     return [base] + [Path(i) for i in vdf['_list']]
 
+class SteamFileError(Exception):
+    pass
+
 class Game:
     __slots__ = ['id', 'name', 'sizeEstimate', 'installpath', 'size']
     
     def __init__(self, path):
         '''Game, given path to ACF reference.'''
         info = readSteamFile(path)
+        if 'appid' not in info:
+            raise SteamFileError('Invalid acf reference')
         
-        self.id = info.get('appid', None)
+        self.id = info.get('appid')        
         self.sizeEstimate = int(info.get('SizeOnDisk', 0))
         self.size = None
     
@@ -182,7 +187,7 @@ class Game:
 class Library:
     __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
     
-    def __init__(self, path):
+    def __init__(self, path, *, log=lambda *a:None):
         '''List of games, given path to library (NOT /steamapps).'''
         self.path = Path(path).as_posix()
         self.games = []
@@ -190,7 +195,11 @@ class Library:
         gamespath = Path(path) / 'steamapps'
         for i in os.listdir(gamespath):
             if i.startswith('appmanifest_') and i.endswith('.acf'):
-                self.games.append(Game(gamespath / i))
+                try:
+                    game = Game(gamespath / i)
+                    self.games.append(game)
+                except SteamFileError:
+                    log('Invalid file ' + i)
         
         self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(str(path))
         self.sizeFree = self.sizeTotal - self.sizeUsed

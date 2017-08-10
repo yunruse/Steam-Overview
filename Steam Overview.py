@@ -49,7 +49,7 @@ def _main(log):
     libraries = []
     for path in paths:
         log("Finding games at '{}'… ".format(path))
-        lib = steamfile.Library(path)
+        lib = steamfile.Library(path, log=log)
         
         if len(lib.games):
             libraries.append(lib)
