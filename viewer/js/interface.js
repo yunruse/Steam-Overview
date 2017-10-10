@@ -8,12 +8,23 @@ function subtitleDisplay(message, isError) {
   subtitle.innerHTML = message;
 }
 
+function formatTime(seconds) {
+  if( seconds >= 24 * 60 * 60 ){
+    return "more than a day"
+  } else if( seconds >= 60 * 60 ){
+    return roundDecimals(seconds / (60 * 60), 0) + " hours"
+  } else if( seconds >= 60 ){
+    return roundDecimals(seconds / 60, 0) + " minutes"
+  } else {
+    return roundDecimals(seconds) + " seconds"
+  }
+}
+
 function displayTimeSince() {
   var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved
   
   if( timeSince >= 60){
-    var minutes = roundDecimals(timeSince / 60, 0),
-        timeText = "Last updated " + minutes + " minutes ago",
+    var timeText = "Last updated " + formatTime(timeSince) + " ago",
         needsRerun = (timeSince >= 30 * 60);
     if( needsRerun ){
       timeText += " (please rerun <code>Steam Overview.py</code>)"
