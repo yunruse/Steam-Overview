@@ -1,8 +1,8 @@
 /* Useful functions */
 
-function classBool(bool, cssClass /*, element, element2, ... */){
-  for( var i = 2; i < arguments.length; i++ ){
-    var cL = arguments[i].classList;
+function classBool(bool, cssClass, elements){
+  for( var i = 0; i < elements.length; i++ ){
+    var cL = elements[i].classList;
     bool ? cL.add(cssClass) : cL.remove(cssClass);
   }
 }

@@ -5,11 +5,11 @@ toggle = function(id, caller) {
       tabs = document.getElementsByClassName('infoTab');
   
   if( makeVisible ){
-    classBool(false, 'visible', ...tabs)
-    classBool(false, 'hovered', ...selectors)
+    classBool(false, 'visible', tabs)
+    classBool(false, 'hovered', selectors)
   }
-  classBool(makeVisible, 'visible', item)
-  classBool(makeVisible, 'hovered', caller)
+  classBool(makeVisible, 'visible', [item])
+  classBool(makeVisible, 'hovered', [caller])
 }
 
 /* Automatic (and manual) tutorial */

@@ -4,7 +4,7 @@ function subtitleDisplay(message, isError) {
     return;
   }
   
-  classBool(isError, 'error', subtitle);
+  classBool(isError, 'error', [subtitle]);
   subtitle.innerHTML = message;
 }
 
