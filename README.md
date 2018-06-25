@@ -6,6 +6,7 @@ A toolkit for simple overview of your Steam games and how much space they take o
 [Download], extract and run `Steam Overview.py` (requires [Python] > 3.4); after scanning the results will appear in your browser.
 
 ## Update log
+- **1.2.2: Fixed up many more bugs, made tutorial easier to use**
 - **1.2.1: Fixed many bugs with thanks to /r/pcmasterrace**
 - **1.2: Added help info and tutorial, refactored code.**
 - 1.1: Quality-of-life tweaks and bugfixes.
@@ -13,4 +14,3 @@ A toolkit for simple overview of your Steam games and how much space they take o
 
 [Download]: https://github.com/yunruse/Steam-Overview/archive/master.zip "Steam-Overview-master.zip"
 [Python]: https://www.python.org/downloads/ "Python download site"
-
