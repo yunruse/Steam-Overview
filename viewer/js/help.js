@@ -19,7 +19,7 @@ setupTutorial = function(){
 
 startTutorial = function(){  
   if( tutorialTimeStarted !== 0 ){
-    hintInterfaceDisplay(4, tutorialTimeStarted)
+    hintInterfaceDisplay(3, tutorialTimeStarted)
     tutorialTimeStarted = 0
     return
   }
@@ -30,38 +30,37 @@ startTutorial = function(){
   hintInterfaceDisplay(1, timeStarted)
   setTimeout(function() {hintInterfaceDisplay(2, timeStarted)},  3000)
   setTimeout(function() {hintInterfaceDisplay(3, timeStarted)},  8000)
-  setTimeout(function() {hintInterfaceDisplay(4, timeStarted)}, 13000)
 }
 
 hintInterfaceDisplay = function(state, timeStarted){
   if( tutorialTimeStarted !== timeStarted ){ return; } // manually stopped
   
   var game = gameBindings.tutorialShown,
-      others = gameBindings.tutorialShadowElements,
       pL = game.element.playLink
   
   // Shadow non-tutorial game
-  classBool(state < 4, 'shadowed', others)
+  classBool(state < 3, 'shadowed', gameBindings.tutorialShadowElements)
   // Make 'play link' smaller for instructional purposes
-  classBool(state < 4, 'tutorialItem', [game.element])
+  classBool(state < 3, 'tutorialItem', [game.element])
+  
+  var doHighlight = true,
+      doLockIn = false,
+      doDisplayPotential = true;
   
   switch( state ){
     case 1:
-      pL.innerText = "[Mouseover to see info]"
+      doDisplayPotential = false
+      pL.innerText = "[Mouse over to identify size]"
       break
     case 2:
-      pL.innerText = "[Click to lock in]"
-      break
-    case 3:
-      pL.innerText = "[See size in other libraries]"
+      doLockIn = true
+      pL.innerText = "[Click to see size in other libraries]"
       break
     default:
+      doHighlight = false
       pL.innerText = "Play..."
       tutorialTimeStarted = 0;
   }
-  
-  var doHighlight = state < 4,
-      doLockIn = state == 2,
-      doDisplayPotential = state < 4;
+  console.log(state, doHighlight, doLockIn, doDisplayPotential)
   gameHighlight(game, doHighlight, doLockIn, doDisplayPotential)
 }
