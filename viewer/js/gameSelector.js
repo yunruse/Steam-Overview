@@ -1,17 +1,16 @@
 var gameBindings = { "length": 0 };
 
 function bindGame(game){
-  game.bindingID = gameBindings.length;
-  gameBindings[game.bindingID] = game;
-  gameBindings.length++
+  game.bindingID = gameBindings.length
+  gameBindings[game.bindingID] = game
+  gameBindings.length++  
   
-  game.element.onmouseover = function(){ gameSelect(game, true, false)};
-  game.element.onmouseout = function(){ gameSelect(game, false, false)};
-  game.element.onclick = function(){ gameSelect(game, true, true)};
-  
-  game.barElement.onmouseover = function(){ gameSelect(game, true, false)};
-  game.barElement.onmouseout = function(){ gameSelect(game, false, false)};
-  game.barElement.onclick = function(){ gameSelect(game, true, true)};
+  game.element.onmouseover = game.barElement.onmouseover =
+      function(){ gameSelect(game, true, false)}
+  game.element.onmouseout = game.barElement.onmouseout =
+      function(){ gameSelect(game, false, false)}
+  game.element.onclick = game.barElement.onclick = 
+      function(){ gameSelect(game, true, true)}
 }
 
 function gameSelect(game, didMouse, didClick){
