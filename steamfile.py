@@ -196,6 +196,8 @@ class Game:
     
         installdir = info.get('installdir', None)
         self.name = info.get('name', installdir)
+        for i in '(™) ™ (c) (C) (r) (R) © ®'.split():
+            self.name = self.name.replace(i, '')
         self.installpath = Path(os.path.split(path)[0]) / 'common' / installdir
     
     def getSize(self):
