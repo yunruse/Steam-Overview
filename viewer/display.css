@@ -58,10 +58,6 @@ ol, ul {
 
 /* Generic classes */
 
-.smaller {
-  font-size: 0.8em;
-}
-
 .hidden { display: none !important; }
 
 /* Interface specifics */
@@ -102,6 +98,10 @@ ol, ul {
   position: relative;
   height: 5px;
   transition: height 0.5s;
+}
+
+.tutorialItem .playLink {
+  font-size: 0.8em;
 }
 
 #tutorialBox {

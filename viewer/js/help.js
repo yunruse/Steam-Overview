@@ -41,13 +41,8 @@ hintInterfaceDisplay = function(state, timeStarted){
       pL = game.element.playLink
   
   // Shadow non-tutorial game
-  for (var i = 0; i < others.length; i++ ){
-    classBool(state < 4, 'shadowed', others[i])
-  }
+  classBool(state < 4, 'shadowed', others)
   // Make 'play link' smaller for instructional purposes
-  classBool(state < 4, 'smaller', game.element.playLink)
-  classBool(state < 4, 'hovered', tutorialBox)
-  
   classBool(state < 4, 'tutorialItem', [game.element])
   
   switch( state ){

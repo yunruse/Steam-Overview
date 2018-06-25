@@ -40,13 +40,9 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
   try { game.barElement.classList }
   catch(e) { console.log(game) }
   
-  var bC = game.barElement.classList;
-  doHighlight ? bC.add('hovered') : bC.remove('hovered');
-  doLockIn ? bC.add('locked') : bC.remove('locked')
-  
-  var gC = game.element.classList;
-  doHighlight ? gC.add('hovered') : gC.remove('hovered');
-  doLockIn ? gC.add('locked') : gC.remove('locked')
+  var elements = [game.element, game.barElement]
+  classBool(doHighlight, 'hovered', elements)
+  classBool(doLockIn, 'locked', elements)
   
   if( !doDisplayPotential ){ return; }
   
