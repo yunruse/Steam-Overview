@@ -24,6 +24,12 @@ startTutorial = function(){
     return
   }
   
+  var lockedGame = gameBindings['locked'];
+  if( lockedGame ){
+    gameBindings['locked'] = undefined;
+    gameHighlight(lockedGame, false, false, true)
+  }
+  
   var timeStarted = (new Date).valueOf();
   tutorialTimeStarted = timeStarted;
   
@@ -61,6 +67,5 @@ hintInterfaceDisplay = function(state, timeStarted){
       pL.innerText = "Play..."
       tutorialTimeStarted = 0;
   }
-  console.log(state, doHighlight, doLockIn, doDisplayPotential)
   gameHighlight(game, doHighlight, doLockIn, doDisplayPotential)
 }
