@@ -1,17 +1,3 @@
-toggle = function(id, caller) {
-  var item = document.getElementById(id),
-      makeVisible = !item.classList.contains('visible'),
-      selectors = document.getElementsByClassName('infoTabSelector'),
-      tabs = document.getElementsByClassName('infoTab');
-  
-  if( makeVisible ){
-    classBool(false, 'visible', tabs)
-    classBool(false, 'hovered', selectors)
-  }
-  classBool(makeVisible, 'visible', [item])
-  classBool(makeVisible, 'hovered', [caller])
-}
-
 /* Automatic (and manual) tutorial */
 
 var tutorialTimeStarted;
@@ -62,24 +48,24 @@ hintInterfaceDisplay = function(state, timeStarted){
   classBool(state < 4, 'smaller', game.element.playLink)
   classBool(state < 4, 'hovered', tutorialBox)
   
-  //               [do hover]   [toggle lock]
-  gameSelect(game, state < 4, 2 <= state <= 3)
-  // Force styles (just in case)
-  classBool(state == 2, 'locked', game.element, game.barElement)
-  classBool(state < 4, 'hovered', game.element, game.barElement)
+  classBool(state < 4, 'tutorialItem', [game.element])
   
   switch( state ){
     case 1:
+      game.element.onmouseover()
       pL.innerText = "[Mouseover to see info]"
       break
     case 2:
+      game.element.onclick()
       pL.innerText = "[Click to lock in]"
       break
     case 3:
+      game.element.onclick()
       pL.innerText = "[Scroll down to see size on other libraries]"
       break
     default:
-      isTutorialRunning = false
+      game.element.onmouseout()
       pL.innerText = "Play..."
+      isTutorialRunning = false
   }
 }
