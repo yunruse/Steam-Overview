@@ -57,7 +57,7 @@ hintInterfaceDisplay = function(state, timeStarted){
       break
     default:
       pL.innerText = "Play..."
-      isTutorialRunning = false
+      tutorialTimeStarted = 0;
   }
   
   var doHighlight = state < 4,
