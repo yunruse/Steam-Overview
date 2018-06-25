@@ -165,17 +165,14 @@ ol, ul {
   }
 
 .barsegment.additional {
-  opacity: 0.5;
-  transition: width 0.5s, color 0.5s;
-  background-color: hsl(120, 70%, 70%);
+  opacity: 0.8;
+  transition: width 0.5s, left 0.5s, color 0.5s;
+  background-color: hsl(120, 70%, 76%);
   
   text-align: center;
-  color: rgba(255, 255, 255, 0);
+  color: white;
   } .barsegment.additional.tooMuch {
-    background-color: hsl(0, 70%, 70%);
-    color: rgba(255, 255, 255, 1);
-  } .barsegment.additional::after{
-    content: "(Too big!) "
+    background-color: hsl(0, 70%, 76%);
 }
 
 

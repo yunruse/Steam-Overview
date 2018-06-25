@@ -51,23 +51,39 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
   
   for( i = 0; i < libraries.length; i++ ) {
     var lib = libraries[i],
-        percentTaken = 0,
-        tooMuch = false;
+        add = lib.element.additional,
+        size = game.size;
     
-    if( !doLockIn ){
-      percentTaken = 0;
-    } else if( lib.games.indexOf(game) !== -1 ){
-      /* Contains game – don't display */
-      percentTaken = 0;
-    } else if ( game.size > lib.sizeFree ){
-      tooMuch = true;
-      percentTaken = (lib.sizeFree / lib.sizeTotal) + 0.001;
-    } else {
-      percentTaken = game.size / lib.sizeTotal;
+    if( !doLockIn || lib.games.indexOf(game) !== -1 ){
+      /* Own library */
+      size = 0;
     }
     
-    var w = lib.element.additional, wC = w.classList;
-    tooMuch ? wC.add('tooMuch') : wC.remove('tooMuch');
-    w.style.width = percentTaken * 100 + "%";
+    var sizeLeft = lib.sizeFree - size
+        tooMuch = sizeLeft < 0,
+        factor = 100 / lib.sizeTotal,
+        proportion = factor * size,
+        leftenBy = 0, text = ""  
+    
+    if( size > lib.sizeTotal ){
+      leftenBy = size
+      proportion = 1
+      text = "Game too big for drive"
+    } else {
+      if( tooMuch ){
+        leftenBy = -sizeLeft;
+      }
+      if( proportion > 0.2 ){
+        text = formatBytes(Math.abs(sizeLeft), 1)
+         + (tooMuch ? " must be freed" : " would remain");
+      }
+    }
+    
+    if( size )
+      classBool(tooMuch, 'tooMuch', [add])
+    add.style.width = proportion + "%";
+    add.style.left = factor * (lib.sizeUsed - leftenBy) + 0.01 + "%";
+    add.innerText = text;
+    
   }
 }
