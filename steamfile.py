@@ -99,9 +99,9 @@ def isSteamLibrary(path):
 # 
 
 if os.name == 'nt':
-    registryPath = None
-    driveLetters = []
+
     
+    registryPath = None
     try:
         import winreg
     except ModuleNotFoundError:
@@ -110,13 +110,15 @@ if os.name == 'nt':
         try:
             with winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Valve\\Steam') as key:
                 registryPath = winreg.QueryValueEx(key, 'SteamPath')[0]
+                # Make a little nicer
+                registryPath = Path(registryPath.title().replace('X86', 'x86'))
         except FileNotFoundError:
              pass
     
     try:
         from ctypes import windll
     except ModuleNotFoundError:
-        pass
+        driveLetters = []
     else:
         def _doesDriveExist(letter):
             return (windll.kernel32.GetLogicalDrives() >> (ord(letter.upper()) - 65) & 1) != 0
