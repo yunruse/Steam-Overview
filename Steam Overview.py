@@ -13,6 +13,15 @@ import webbrowser
 
 import steamfile
 
+
+# A game's actual size will only differ from Steam's estimate if files are
+# added or removed - mods or installers being removed being the main changes.
+# So below this size, we deem it too unlikely these changes will make enough
+# of a difference to warrant calculating them.
+ESTIMATE_THRESHOLD_MiB = 256
+
+
+
 def _getPaths(log):
     logPath = lambda path: log("Trying '{}'…".format(path))
     paths = steamfile.getLibraryPaths(None, logPath)
@@ -43,7 +52,11 @@ var lastRetrieved = {},
 slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slots__}
 
 def _main(log):
-    log('\nSTEAM OVERVIEW VERSION {}\n'.format(__ver__), prependTime=False)
+    log('''
+STEAM OVERVIEW VERSION {}
+(Games below {} MiB will use Steam's size estimate for speed.
+ If this is inaccurate, change it in `Steam Overview.py`.
+'''.format(__ver__, ESTIMATE_THRESHOLD_MiB), prependTime=False)
     paths = _getPaths(log)
     
     libraries = []
@@ -55,7 +68,8 @@ def _main(log):
             libraries.append(lib)
             log('{} found, getting sizes'.format(len(lib.games)), end='')
             for game in lib.games:
-                game.getSize()
+                if game.sizeEstimate < (ESTIMATE_THRESHOLD_MiB * 1024 * 1024):
+                    game.size = game.sizeEstimate
                 log('.', prependTime=False, end='')
             log()
             lib.getSize()
@@ -85,7 +99,7 @@ def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
     
     return log
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     with open('log.txt', 'w', encoding='utf8') as LOGFILE:
         log = Logger(sys.stdout, LOGFILE)
         try:
