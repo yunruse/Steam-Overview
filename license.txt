@@ -1,4 +1,4 @@
-Copyright (c) Jack Dobson 2017.
+Copyright (c) Jack Dobson 2018.
 
 Permission  is  hereby   granted,   free  of  charge,   to  any   person  and/or
 organisation obtaining  a copy of this software,  associated documentation files
