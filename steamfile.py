@@ -53,6 +53,16 @@ def dirsize(path):
     
     return size(totalSize, len(seen))
 
+def bytesize(size, digits=1, binary=False):
+    divisor = 1024 if binary else 1000
+    for prefix in " KMGTPEZY":
+        if prefix == ' ': prefix = ''
+        if abs(size) < divisor:
+            break
+        elif prefix != "Y":
+            size /= divisor
+    return "{} {}{}B".format(round(size, digits), prefix, "i"*bool(prefix and binary))
+
 STEAMENTRY = re.compile(r'^\t"(.+?)"\t\t"(.+?)"')
 
 def readSteamFile(path):
@@ -165,6 +175,12 @@ class SteamFileError(Exception):
 
 class Game:
     __slots__ = ['id', 'name', 'sizeEstimate', 'installpath', 'size']
+
+    def __repr__(self):
+        return '<Game {!r} (ID {}, {}{})>'.format(
+            self.name, self.id,
+            "~"*(self.size is None),
+            bytesize(self.size or self.sizeEstimate, 2, binary=True))
     
     def __init__(self, path):
         '''Game, given path to ACF reference.'''
@@ -186,6 +202,13 @@ class Game:
 
 class Library:
     __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
+
+    def __repr__(self):
+        return '<Library {!r} ({} games, {}{})>'.format(
+            self.path, len(self.games),
+            "~"*any(game.size is None for game in self.games),
+            bytesize(sum(game.size or game.sizeEstimate for game in self.games)
+                     , 2, binary=True))
     
     def __init__(self, path, *, log=lambda *a:None):
         '''List of games, given path to library (NOT /steamapps).'''
