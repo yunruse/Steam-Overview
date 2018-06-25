@@ -15,16 +15,17 @@ function bindGame(game){
 
 function gameSelect(game, didMouse, didClick){
   var isLocked = (gameBindings['locked'] === game);
+  var doLockIn = didClick;
   if( isLocked ){
     if( !didClick ) { return; /* No clicky, no unlocky! */ }
     if( gameBindings['locked'] === game ){
       didMouse = true;
       gameBindings['locked'] = undefined;
     }
-    didClick = false;
+    doLockIn = false;
   }
   
-  if( didClick ){
+  if( doLockIn ){
     var unlockGame = gameBindings['locked']
     if( unlockGame ){
       gameHighlight(unlockGame, false, false, false)
@@ -32,7 +33,7 @@ function gameSelect(game, didMouse, didClick){
     gameBindings['locked'] = game;
   }
   
-  gameHighlight(game, didMouse, didClick, didClick)
+  gameHighlight(game, didMouse, doLockIn, didClick)
 }
 
 function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
