@@ -47,20 +47,21 @@ hintInterfaceDisplay = function(state, timeStarted){
   
   switch( state ){
     case 1:
-      game.element.onmouseover()
       pL.innerText = "[Mouseover to see info]"
       break
     case 2:
-      game.element.onclick()
       pL.innerText = "[Click to lock in]"
       break
     case 3:
-      game.element.onclick()
-      pL.innerText = "[Scroll down to see size on other libraries]"
+      pL.innerText = "[See size in other libraries]"
       break
     default:
-      game.element.onmouseout()
       pL.innerText = "Play..."
       isTutorialRunning = false
   }
+  
+  var doHighlight = state < 4,
+      doLockIn = state == 2,
+      doDisplayPotential = state < 4;
+  gameHighlight(game, doHighlight, doLockIn, doDisplayPotential)
 }

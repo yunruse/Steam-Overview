@@ -14,6 +14,9 @@ function bindGame(game){
 }
 
 function gameSelect(game, didMouse, didClick){
+  // Disable manipulation during tutorial
+  if( tutorialTimeStarted ){ return; }
+  
   var isLocked = (gameBindings['locked'] === game);
   var doLockIn = didClick;
   if( isLocked ){
