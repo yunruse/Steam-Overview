@@ -7,10 +7,23 @@ A toolkit for simple overview of your Steam games and how much space they take o
 
 ## Update log
 - **1.2.2: Fixed up many more bugs, made tutorial easier to use**
-- **1.2.1: Fixed many bugs with thanks to /r/pcmasterrace**
+- 1.2.1: Fixed many bugs with thanks to /r/pcmasterrace
 - **1.2: Added help info and tutorial, refactored code.**
 - 1.1: Quality-of-life tweaks and bugfixes.
 - 1.0: Initial release.
 
 [Download]: https://github.com/yunruse/Steam-Overview/archive/master.zip "Steam-Overview-master.zip"
 [Python]: https://www.python.org/downloads/ "Python download site"
+
+### License
+
+This is an old work, so I put it into public domain.
+
+Copyright (c) Jack Dobson (yunru.se) 2018.
+
+This work is licensed under a Creative Commons Zero license.
+To the extend possible under the law, the creator has waived all copyright
+and related or neighbouring rights.
+
+The full license is available here:
+https://creativecommons.org/licenses/by/4.0/
