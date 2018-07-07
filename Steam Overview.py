@@ -54,8 +54,8 @@ slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slo
 def _main(log):
     log('''
 STEAM OVERVIEW VERSION {}
-(Games below {} MiB will use Steam's size estimate for speed.
- If this is inaccurate, change it in `Steam Overview.py`.
+  Games below {} MiB will use Steam's size estimate for speed.
+  If this is inaccurate, change it in `Steam Overview.py`.
 '''.format(__ver__, ESTIMATE_THRESHOLD_MiB), prependTime=False)
     paths = _getPaths(log)
     
