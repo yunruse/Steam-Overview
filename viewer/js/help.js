@@ -1,5 +1,19 @@
 /* Automatic (and manual) tutorial */
 
+toggle = function(id, caller) {
+  var item = document.getElementById(id),
+      makeVisible = !item.classList.contains('visible'),
+      selectors = document.getElementsByClassName('infoTabSelector'),
+      tabs = document.getElementsByClassName('infoTab');
+  
+  if( makeVisible ){
+    classBool(false, 'visible', tabs)
+    classBool(false, 'hovered', selectors)
+  }
+  classBool(makeVisible, 'visible', [item])
+  classBool(makeVisible, 'hovered', [caller])
+}
+
 var tutorialTimeStarted;
 
 setupTutorial = function(){
