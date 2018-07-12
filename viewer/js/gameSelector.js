@@ -66,8 +66,8 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
         leftenBy = 0, text = ""  
     
     if( size > lib.sizeTotal ){
-      leftenBy = size
-      proportion = 1
+      leftenBy = lib.sizeUsed //size
+      proportion = 100
       text = "Game too big for drive"
     } else {
       if( tooMuch ){
