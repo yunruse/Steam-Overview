@@ -34,6 +34,10 @@ a:hover, a.hovered {
   color: #ffa74e;
 }
 
+a:not([href]) {
+  color: #999;
+}
+
 a[onclick] {
   cursor: pointer;
 }

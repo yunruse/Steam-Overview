@@ -1,15 +1,24 @@
 var gameItemContents = "\
 $name$\
-<span class='playLink'><a href='steam://run/$id$'>Play...</a></span>\
+<span class='playLink'><a$playHref$>$playText$</a></span>\
 <span style='color: $colour$' class='col1'>$size$</span>\
 <span style='color: $colour$' class='col2'>$percent$%</span>"
 
 function constructGameItem(game){
-  var library = game.library;
-  li = document.createElement('li');
+  var library = game.library,
+      li = document.createElement('li'),
+      playText = 'Play...',
+      url = game.ID;
+  
+  if( url.indexOf('/') != -1 || url.indexOf('\\') != -1){
+    playText = '(Shortcut)'
+    url = ''
+  } else {
+    url = " href='steam://run/" + url + "'"
+  }
   
   li.innerHTML = replaceAll(gameItemContents,
-    '$name$', game.name, '$id$', game.id,
+    '$name$', game.name, '$playHref$', url, '$playText$', playText,
     '$size$', game.formattedSize, '$percent$', game.percentString,
     '$colour$', game.interfaceColour)
   
