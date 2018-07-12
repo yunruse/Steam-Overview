@@ -57,31 +57,75 @@ STEAM OVERVIEW VERSION {}
   Games below {} MiB will use Steam's size estimate for speed.
   If this is inaccurate, change it in `Steam Overview.py`.
 '''.format(__ver__, ESTIMATE_THRESHOLD_MiB), prependTime=False)
-    paths = _getPaths(log)
     
-    libraries = []
+    paths = _getPaths(log)
+
+    if not paths:
+        log('No steam install found!')
+        return
+
+    # Get steam installed games
+
+    def getDrive(path):
+        base = path.drive or path.root
+        for drv in drives:
+            if drv.path == base:
+                break
+        else:
+            drv = steamfile.Drive(base)
+            drives.append(drv)
+        return drv
+        
+    drives = []
     for path in paths:
         log("Finding games at '{}'… ".format(path))
-        lib = steamfile.Library(path, log=log)
-        
-        if len(lib.games):
-            libraries.append(lib)
-            log('{} found, getting sizes'.format(len(lib.games)), end='')
-            for game in lib.games:
-                if game.sizeEstimate < (ESTIMATE_THRESHOLD_MiB * 1024 * 1024):
-                    game.size = game.sizeEstimate
-                log('.', prependTime=False, end='')
-            log()
-            lib.getSize()
-        else:
-            log('No games found, ignoring')
+        path = Path(path)
+        drv = getDrive(path)
+        drv.appendLibrary(path)
+
+    # Get shortcut games too
     
-    libraries.sort(key=lambda l: l.sizeTotal)
+    log("Finding shortcut games…")
+
+    shortcutGames = {}
+
+    userdata = Path(paths[0]) / 'userdata'
+    for userID in os.listdir(str(userdata)):
+        conf = userdata / userID / 'config' / 'shortcuts.vdf'
+        shortcutGames.update(steamfile.shortcutGames(conf))
+
+    for exe, game in shortcutGames.items():
+        path = Path(exe)
+        drv = getDrive(path)
+        drv.games.append(game)        
+
+    # Filter drives, get actual sizes
+
+    drives = [drv for drv in drives if len(drv.games)]
+    
+    for drv in drives:
+        log('{} games in {!r}, getting sizes'.format(
+            len(drv.games), drv.path), end='')
+        
+        for game in drv.games:
+            e = game.sizeEstimate
+            # shortcuts have no estimate, represented by 0
+            skipSize = 0 < game.sizeEstimate < ESTIMATE_THRESHOLD_MiB * 1024 * 1024
+            if skipSize:
+                game.size = e
+            else:
+                game.getSize()
+            log('.', prependTime=False, end='')
+        log()
+
+        drv.getSize()    
+    
+    drives.sort(key=lambda l: l.sizeTotal)
     
     log('Done, passing to `viewer/viewer.html`…')
     
     with open('libraries.js', 'w') as f:
-        _json = json.dumps(libraries, indent=1, default=slottableToDict)
+        _json = json.dumps(drives, indent=1, default=slottableToDict)
         f.write(FORMAT.format(time.time(), _json))
     
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'

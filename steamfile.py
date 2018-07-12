@@ -176,36 +176,50 @@ class SteamFileError(Exception):
     pass
 
 class Game:
-    __slots__ = ['id', 'name', 'sizeEstimate', 'installpath', 'size']
+    __slots__ = 'ID name installdir sizeEstimate size'.split()
 
+    def __init__(self, ID, name, installdir, sizeEstimate=0, size=None):
+        self.ID = ID
+        for i in '(™) ™ (c) (C) (r) (R) © ®'.split():
+            name = name.replace(i, '')
+        self.name = name
+        self.installdir = installdir
+        self.sizeEstimate = sizeEstimate
+        self.size = size
+        
     def __repr__(self):
-        return '<Game {!r} (ID {}, {}{})>'.format(
-            self.name, self.id,
-            "~"*(self.size is None),
-            bytesize(self.size or self.sizeEstimate, 2, binary=True))
-    
-    def __init__(self, path):
+        size = self.size or self.sizeEstimate or 0
+        if size:
+            size = ('~' * self.size is None) + bytesize(size, 2, binary=True)
+        else:
+            size = 'Shortcut'
+        return '<Game {!r} ({})>'.format(
+            self.name, size)
+
+    @classmethod
+    def fromACF(cls, path):
         '''Game, given path to ACF reference.'''
         info = readSteamFile(path)
         if 'appid' not in info:
             raise SteamFileError('Invalid acf reference')
-        
-        self.id = info.get('appid')        
-        self.sizeEstimate = int(info.get('SizeOnDisk', 0))
-        self.size = None
     
-        installdir = info.get('installdir', None)
-        self.name = info.get('name', installdir)
-        for i in '(™) ™ (c) (C) (r) (R) © ®'.split():
-            self.name = self.name.replace(i, '')
-        self.installpath = Path(os.path.split(path)[0]) / 'common' / installdir
+        folder = info.get('installdir') or None
+        installdir = None
+        if folder:
+            installdir = Path(os.path.split(path)[0]) / 'common' / folder
+
+        ID = info.get('appid')
+        name = info.get('name') or folder        
+        sizeEstimate = int(info.get('SizeOnDisk', 0))
+
+        return cls(ID, name, installdir, sizeEstimate, size=None)
     
     def getSize(self):
         if self.size is None:
-            self.size = dirsize(self.installpath).totalSize
+            self.size = dirsize(self.installdir).totalSize
 
-class Library:
-    __slots__ = ['games', 'path', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
+class Drive:
+    __slots__ = ['path', 'games', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
 
     def __repr__(self):
         return '<Library {!r} ({} games, {}{})>'.format(
@@ -213,27 +227,63 @@ class Library:
             "~"*any(game.size is None for game in self.games),
             bytesize(sum(game.size or game.sizeEstimate for game in self.games)
                      , 2, binary=True))
-    
-    def __init__(self, path, *, log=lambda *a:None):
-        '''List of games, given path to library (NOT /steamapps).'''
-        self.path = Path(path).as_posix()
+
+    def __init__(self, path):
+        p = Path(path)
+        self.path = p.drive or p.root
         self.games = []
-        
+        self.sizeTotal, self.sizeUsed, self.sizeFree = shutil.disk_usage(str(path))
+        self.sizeGames = 0
+
+    def appendLibrary(self, path, log=lambda *a: None):
+        '''List of games, given path to library (NOT /steamapps).'''        
         gamespath = Path(path) / 'steamapps'
         for i in os.listdir(gamespath):
             if i.startswith('appmanifest_') and i.endswith('.acf'):
                 try:
-                    game = Game(gamespath / i)
+                    game = Game.fromACF(gamespath / i)
                     self.games.append(game)
                 except SteamFileError:
                     log('Invalid file ' + i)
-        
-        self.sizeTotal, self.sizeUsed, _ = shutil.disk_usage(str(path))
-        self.sizeFree = self.sizeTotal - self.sizeUsed
-        self.sizeGames = 0
     
     def getSize(self):
         for game in self.games:
             game.getSize()
         self.games.sort(key=lambda g: g.size, reverse=True)
         self.sizeGames = sum(game.size for game in self.games)
+
+def shortcutGames(fp):
+    file = open(fp, 'rb')
+    tokens = []
+    txt = b''
+    while True:
+        char = file.read(1)
+        if not char:
+            break
+
+        if char == b'\0':
+            if txt:
+                try:
+                    tokens.append(txt.decode())
+                except UnicodeDecodeError:
+                    pass
+            txt = b''
+        else:
+            txt += char
+
+    file.close()
+
+    games = {}
+    game = {}
+    for i, t in enumerate(tokens):
+        if t.isnumeric():
+            if game:
+                games[game['ID']] = Game(**game)
+            game = {}
+        elif t == '\1appname':
+            game['name'] = tokens[i+1]
+        elif t == '\1StartDir':
+            game['installdir'] = tokens[i+1][1:-1]
+        elif t == '\1Exe':
+            game['ID'] = tokens[i+1][1:-1]
+    return games
