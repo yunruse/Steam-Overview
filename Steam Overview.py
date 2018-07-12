@@ -2,7 +2,7 @@
 
 '''Steam Overview main script, handling input, error handling, logging and output.'''
 
-__ver__ = '1.2.2'
+__ver__ = '1.3'
 
 import json
 import os
