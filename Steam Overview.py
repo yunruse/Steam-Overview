@@ -14,7 +14,6 @@ import webbrowser
 
 import steamfile
 
-
 # A game's actual size will only differ from Steam's estimate if files are
 # added or removed - mods or installers being removed being the main changes.
 # So below this size, we deem it too unlikely these changes will make enough
@@ -50,9 +49,9 @@ slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slo
 
 def _main(log):
     log('''
-STEAM OVERVIEW VERSION {}
-  Games below {} MiB will use Steam's size estimate for speed.
-  If this is inaccurate, change it in `Steam Overview.py`.
+       STEAM OVERVIEW VERSION {}
+       Games below {} MiB will use Steam's size estimate for speed.
+       If this is inaccurate, change it in `Steam Overview.py`.
 ''', __ver__, ESTIMATE_THRESHOLD_MiB, prependTime=False)
     
     paths = _getPaths(log)
