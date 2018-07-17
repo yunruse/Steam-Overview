@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import sys
 import time
+from datetime import datetime
 import webbrowser
 
 import steamfile
@@ -20,10 +21,9 @@ import steamfile
 # of a difference to warrant calculating them.
 ESTIMATE_THRESHOLD_MiB = 256
 
-
-
 def _getPaths(log):
-    logPath = lambda path: log("Trying '{}'…".format(path))
+    logPath = lambda path: log("Trying '{}'…", path)
+    
     paths = steamfile.getLibraryPaths(None, logPath)
     attempts = 0
     while len(paths) == 0:
@@ -37,9 +37,6 @@ def _getPaths(log):
         
         attempts += 1
         paths = steamfile.getLibraryPaths(input("~ "), logPath)
-    
-    if attempts == 0:
-        log("Found Steam install path.")
     
     return paths
 
@@ -56,7 +53,7 @@ def _main(log):
 STEAM OVERVIEW VERSION {}
   Games below {} MiB will use Steam's size estimate for speed.
   If this is inaccurate, change it in `Steam Overview.py`.
-'''.format(__ver__, ESTIMATE_THRESHOLD_MiB), prependTime=False)
+''', __ver__, ESTIMATE_THRESHOLD_MiB, prependTime=False)
     
     paths = _getPaths(log)
 
@@ -78,14 +75,14 @@ STEAM OVERVIEW VERSION {}
         
     drives = []
     for path in paths:
-        log("Finding games at '{}'… ".format(path))
+        log("Finding games at '{}'… ", path)
         path = Path(path)
         drv = getDrive(path)
         drv.appendLibrary(path)
 
     # Get shortcut games too
     
-    log("Finding shortcut games…")
+    log("Finding games at user shortcuts…")
 
     shortcutGames = {}
 
@@ -104,8 +101,8 @@ STEAM OVERVIEW VERSION {}
     drives = [drv for drv in drives if len(drv.games)]
     
     for drv in drives:
-        log('{} games in {!r}, getting sizes'.format(
-            len(drv.games), drv.path), end='')
+        log('{} games in {}, getting sizes',
+            len(drv.games), drv.path, end='')
         
         for game in drv.games:
             e = game.sizeEstimate
@@ -117,8 +114,8 @@ STEAM OVERVIEW VERSION {}
                 game.getSize()
             log('.', prependTime=False, end='')
         log()
-
-        drv.getSize()    
+        # get drive size info
+        drv.getSize()
     
     drives.sort(key=lambda l: l.sizeTotal)
     
@@ -131,15 +128,19 @@ STEAM OVERVIEW VERSION {}
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
     webbrowser.open_new_tab(viewer)
 
-def Logger(*FILES, TIMEFORMAT='%H:%M:%S '):
+def Logger(*FILES):
     if not FILES:
         FILES = (sys.stdout, )
+
+    starttime = time.time()
     
-    def log(text='', prependTime=True, *args, **kwargs):
+    def log(text='', *args, prependTime=True, end='\n', **kwargs):
         if text and prependTime:
-            text = time.strftime(TIMEFORMAT) + text
+            text = '{:06.03f} '.format(time.time() - starttime) + text
+            #text = datetime.now().strftime(timeformat) + text
+        text = text.format(*args, **kwargs)
         for f in FILES:
-            print(text, file=f, **kwargs)
+            print(text, file=f, end=end)
     
     return log
 
@@ -149,8 +150,7 @@ if __name__ == '__main__':
         try:
             _main(log)
         except Exception as e:
-            errmsg = "\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}".format(
-                type(e).__name__, ', '.join(e.args) )
-            log(errmsg, prependTime=False)
+            log("\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}",
+                type(e).__name__, ', '.join(e.args), prependTime=False)
             input('The error will be logged in log.txt. Press any key to exit…')
             raise
