@@ -127,21 +127,22 @@ def _main(log):
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
     webbrowser.open_new_tab(viewer)
 
-def Logger(*FILES):
-    if not FILES:
-        FILES = (sys.stdout, )
+class Logger:
+    __slots__ = 'files starttime lastline'.split()
+    def __init__(self, *files):
+        if not files:
+            files = (sys.stdout, )
 
-    starttime = time.time()
-    
-    def log(text='', *args, prependTime=True, end='\n', **kwargs):
+        self.files = files
+        self.starttime = time.time()
+
+    def log(self, text='', *args, prependTime=True, end='\n', **kwargs):        
         if text and prependTime:
-            text = '{:06.03f} '.format(time.time() - starttime) + text
-            #text = datetime.now().strftime(timeformat) + text
+            text = '{:06.03f} '.format(time.time() - self.starttime) + text
         text = text.format(*args, **kwargs)
-        for f in FILES:
+        for f in self.files:
             print(text, file=f, end=end)
-    
-    return log
+        
 
 if __name__ == '__main__':
     with open('log.txt', 'w', encoding='utf8') as LOGFILE:
