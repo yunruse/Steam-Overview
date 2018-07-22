@@ -50,7 +50,8 @@ slottableToDict = lambda obj: {key: getattr(obj, key, None) for key in obj.__slo
 def _main(log):
     log('''
        STEAM OVERVIEW VERSION {}
-       Games below {} MiB will use Steam's size estimate for speed.
+       Games marked * are shortcuts and must have their size calculated.
+       Games marked ~ have a size below {} MiB, and use Steam's estimate.
        If this is inaccurate, change it in `Steam Overview.py`.
 ''', __ver__, ESTIMATE_THRESHOLD_MiB, prependTime=False)
     
@@ -98,26 +99,36 @@ def _main(log):
     # Filter drives, get actual sizes
 
     drives = [drv for drv in drives if len(drv.games)]
+
     
     for drv in drives:
-        log('{} games in {}, getting sizes',
-            len(drv.games), drv.path, end='')
-        
-        for game in drv.games:
-            e = game.sizeEstimate
-            # shortcuts have no estimate, represented by 0
-            skipSize = 0 < game.sizeEstimate < ESTIMATE_THRESHOLD_MiB * 1024 * 1024
-            if skipSize:
-                game.size = e
-            else:
-                game.getSize()
-            log('.', prependTime=False, end='')
         log()
+        log('{} has {} games:', drv.path, len(drv.games))
+        drv.games.sort(key=lambda game: game.sizeEstimate, reverse=True)
+        
+        for count, game in enumerate(drv.games, start=1):
+            e = game.sizeEstimate
+            symbol = ''
+            
+            if e == 0:
+                # steam shortcut
+                symbol = '*'
+            elif e < ESTIMATE_THRESHOLD_MiB * 1024 * 1024:
+                # auto-skip
+                symbol = '~'
+                game.size = e
+            
+            if not game.size:
+                game.getSize()
+            log('{:>10} {:1} {}',
+                steamfile.bytesize(game.size, digits=1, binary=True),
+                symbol, game.name)
         # get drive size info
         drv.getSize()
     
     drives.sort(key=lambda l: l.sizeTotal)
-    
+
+    log()
     log('Done, passing to `viewer/viewer.html`…')
     
     with open('libraries.js', 'w') as f:
@@ -146,7 +157,7 @@ class Logger:
 
 if __name__ == '__main__':
     with open('log.txt', 'w', encoding='utf8') as LOGFILE:
-        log = Logger(sys.stdout, LOGFILE)
+        log = Logger(sys.stdout, LOGFILE).log
         try:
             _main(log)
         except Exception as e:
