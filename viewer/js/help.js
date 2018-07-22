@@ -78,7 +78,7 @@ hintInterfaceDisplay = function(state, timeStarted){
       break
     default:
       doHighlight = false
-      pL.innerText = "Play..."
+      pL.innerText = "Details..."
       tutorialTimeStarted = 0;
   }
   gameHighlight(game, doHighlight, doLockIn, doDisplayPotential)

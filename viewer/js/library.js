@@ -7,14 +7,12 @@ $name$\
 function constructGameItem(game){
   var library = game.library,
       li = document.createElement('li'),
-      playText = 'Play...',
-      url = game.ID;
+      playText = '(Shortcut)',
+      url = ''
   
-  if( url.indexOf('/') != -1 || url.indexOf('\\') != -1){
-    playText = '(Shortcut)'
-    url = ''
-  } else {
-    url = " href='steam://run/" + url + "'"
+  if( game.ID.indexOf('/') == -1 && game.ID.indexOf('\\') == -1){
+    playText = 'Details...'
+    url = " href='steam://nav/games/details/" + game.ID + "'"
   }
   
   li.innerHTML = replaceAll(gameItemContents,
