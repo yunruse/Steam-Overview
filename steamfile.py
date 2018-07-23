@@ -273,17 +273,19 @@ def shortcutGames(fp):
 
     file.close()
 
-    games = {}
+    games = []
     game = {}
     for i, t in enumerate(tokens):
         if t.isnumeric():
             if game:
-                games[game['ID']] = Game(**game)
+                games.append(Game(**game))
             game = {}
+        
         elif t == '\1appname':
             game['name'] = tokens[i+1]
         elif t == '\1StartDir':
             game['installdir'] = tokens[i+1][1:-1]
         elif t == '\1Exe':
+            # To ensure shortcut games are unique, their ID is the path to their executable.
             game['ID'] = tokens[i+1][1:-1]
     return games
