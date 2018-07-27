@@ -26,7 +26,6 @@ def _getPaths(log):
     paths = getLibraryPaths(None, logPath)
     attempts = 0
     while len(paths) == 0:
-        # Slightly conversational because if you're here, something's wrong
         if attempts == 0:
             log("Couldn't automatically find Steam install directory.")
             print("Sorry about that. Please provide a path:")
@@ -151,8 +150,8 @@ class Logger:
         
 
 if __name__ == '__main__':
-    with open('log.txt', 'w', encoding='utf8') as LOGFILE:
-        log = Logger(sys.stdout, LOGFILE).log
+    with open('log.txt', 'w', encoding='utf8') as f:
+        log = Logger(sys.stdout, f).log
         try:
             _main(log)
         except Exception as e:
