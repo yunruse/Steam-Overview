@@ -7,7 +7,7 @@
       "classList" in document.documentElement) {
     return;
   }
-
+  
   var prototype = Array.prototype,
       push = prototype.push,
       splice = prototype.splice,
@@ -22,7 +22,7 @@
       push.call(this, classes[i]);
     }
   }
-
+  
   DOMTokenList.prototype = {
     add: function (token) {
       if (this.contains(token)) return;
@@ -56,9 +56,9 @@
       return this.contains(token);
     }
   };
-
+  
   window.DOMTokenList = DOMTokenList;
-
+  
   function defineElementGetter(obj, prop, getter) {
     if (Object.defineProperty) {
       Object.defineProperty(obj, prop, {
@@ -68,7 +68,7 @@
       obj.__defineGetter__(prop, getter);
     }
   }
-
+  
   defineElementGetter(HTMLElement.prototype, 'classList', function () {
     return new DOMTokenList(this);
   });

@@ -51,13 +51,13 @@ def _main(log):
     log('''STEAM OVERVIEW VERSION {}\n''', __ver__)
     
     paths = _getPaths(log)
-
+    
     if not paths:
         log('No steam install found!')
         return
-
+    
     # Get steam-installed games
-
+    
     drives = []
     def getDrive(path):
         '''Get drive at provided path, adding it to drives if nonexistent.'''
@@ -113,7 +113,7 @@ def _main(log):
                 # auto-skip
                 symbol = '~'
                 game.size = e
-
+            
             game.getSize()
             
             log('{:>10} {:1} {}',
@@ -122,7 +122,7 @@ def _main(log):
         
         # get drive size info
         drv.getSize()
-
+    
     # sort drives by their size - typically, a smaller drive will
     # be an SSD and so the 'primary' drive
     drives.sort(key=lambda l: l.sizeTotal)
@@ -142,12 +142,11 @@ class Logger:
         if not files:
             files = (sys.stdout, )
         self.files = files
-
+    
     def log(self, text='', *args, **kwargs):
         text = text.format(*args, **kwargs)
         for f in self.files:
             print(text, file=f)
-        
 
 if __name__ == '__main__':
     with open('log.txt', 'w', encoding='utf8') as f:

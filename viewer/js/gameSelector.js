@@ -3,7 +3,7 @@ var gameBindings = { "length": 0 };
 function bindGame(game){
   game.bindingID = gameBindings.length
   gameBindings[game.bindingID] = game
-  gameBindings.length++  
+  gameBindings.length++
   
   game.element.onmouseover = game.barElement.onmouseover =
       function(){ gameSelect(game, true, false)}
@@ -84,6 +84,5 @@ function gameHighlight(game, doHighlight, doLockIn, doDisplayPotential) {
     add.style.width = proportion + "%";
     add.style.left = factor * (lib.sizeUsed - leftenBy) + 0.01 + "%";
     add.innerText = text;
-    
   }
 }

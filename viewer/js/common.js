@@ -47,7 +47,7 @@ function formatBytes(size, digits, binary) {
   }
   
   if( binary && prefix ){ prefix += "i"; }
-   
+  
   return roundDecimals(size, digits) + " " + prefix + "B";
 }
 

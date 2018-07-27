@@ -99,7 +99,6 @@ def isSteamLibrary(path):
 # 
 
 if os.name == 'nt':
-
     
     registryPath = None
     try:
@@ -177,7 +176,7 @@ class SteamFileError(Exception):
 
 class Game:
     __slots__ = 'ID name installdir sizeEstimate size'.split()
-
+    
     def __init__(self, ID, name, installdir, sizeEstimate=0, size=None):
         self.ID = ID
         for i in '(™) ™ (c) (C) (r) (R) © ®'.split():
@@ -186,7 +185,7 @@ class Game:
         self.installdir = installdir
         self.sizeEstimate = sizeEstimate
         self.size = size
-        
+    
     def __repr__(self):
         size = self.size or self.sizeEstimate or 0
         if size:
@@ -195,23 +194,23 @@ class Game:
             size = 'Shortcut'
         return '<Game {!r} ({})>'.format(
             self.name, size)
-
+    
     @classmethod
     def fromACF(cls, path):
         '''Game, given path to ACF reference.'''
         info = readSteamFile(path)
         if 'appid' not in info:
             raise SteamFileError('Invalid acf reference')
-    
+        
         folder = info.get('installdir') or None
         installdir = None
         if folder:
             installdir = Path(os.path.split(path)[0]) / 'common' / folder
-
+        
         ID = info.get('appid')
         name = info.get('name') or folder        
         sizeEstimate = int(info.get('SizeOnDisk', 0))
-
+        
         return cls(ID, name, installdir, sizeEstimate, size=None)
     
     def getSize(self):
@@ -220,21 +219,21 @@ class Game:
 
 class Drive:
     __slots__ = ['path', 'games', 'sizeTotal', 'sizeUsed', 'sizeFree', 'sizeGames']
-
+    
     def __repr__(self):
         return '<Library {!r} ({} games, {}{})>'.format(
             self.path, len(self.games),
-            "~"*any(game.size is None for game in self.games),
+            "~" * any(game.size is None for game in self.games),
             bytesize(sum(game.size or game.sizeEstimate for game in self.games)
                      , 2, binary=True))
-
+    
     def __init__(self, path):
         p = Path(path)
         self.path = p.drive or p.root
         self.games = []
         self.sizeTotal, self.sizeUsed, self.sizeFree = shutil.disk_usage(str(path))
         self.sizeGames = 0
-
+    
     def appendLibrary(self, path, log=lambda *a: None):
         '''List of games, given path to library (NOT /steamapps).'''        
         gamespath = Path(path) / 'steamapps'
@@ -260,7 +259,7 @@ def shortcutGames(fp):
         char = file.read(1)
         if not char:
             break
-
+        
         if char == b'\0':
             if txt:
                 try:
@@ -270,9 +269,9 @@ def shortcutGames(fp):
             txt = b''
         else:
             txt += char
-
+    
     file.close()
-
+    
     games = []
     game = {}
     for i, t in enumerate(tokens):
