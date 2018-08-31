@@ -83,12 +83,13 @@ def _main(log):
     
     for userID in os.listdir(userdata):
         conf = userdata / userID / 'config' / 'shortcuts.vdf'
-        for game in shortcutGames(conf):
-            shortcutsExist = True
-            # To ensure shortcut 
-            path = Path(game.ID)
-            drv = getDrive(path)
-            drv.games.append(game)
+        if os.path.isfile(conf):
+            for game in shortcutGames(conf):
+                shortcutsExist = True
+                # To ensure shortcut 
+                path = Path(game.ID)
+                drv = getDrive(path)
+                drv.games.append(game)
     
     log("\nGetting game sizes...")
     if shortcutsExist:
