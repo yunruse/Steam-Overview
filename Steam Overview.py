@@ -155,6 +155,6 @@ if __name__ == '__main__':
             _main(log)
         except Exception as e:
             log("\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}",
-                type(e).__name__, ', '.join(e.args), prependTime=False)
+                type(e).__name__, ', '.join(map(str, e.args)), prependTime=False)
             input('The error will be logged in log.txt. Press any key to exit…')
             raise
