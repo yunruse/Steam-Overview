@@ -252,6 +252,9 @@ class Drive:
         self.sizeGames = sum(game.size for game in self.games)
 
 def shortcutGames(fp):
+    '''Obtain games linked with shortcuts.'''
+    # TODO: Fix this hotfix!
+    return []
     file = open(fp, 'rb')
     tokens = []
     txt = b''
