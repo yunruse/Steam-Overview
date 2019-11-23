@@ -18,7 +18,7 @@ A toolkit for simple overview of your Steam games and how much space they take o
 
 This is an old work, so I put it into public domain.
 
-Copyright (c) Jack Dobson (yunru.se) 2018.
+Copyright (c) Mia yun Ruse (yunru.se) 2019.
 
 This work is licensed under a Creative Commons Zero license.
 To the extend possible under the law, the creator has waived all copyright
