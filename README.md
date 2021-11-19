@@ -6,7 +6,8 @@ A toolkit for simple overview of your Steam games and how much space they take o
 [Download], extract and run `Steam Overview.py` (requires [Python] > 3.4); after scanning the results will appear in your browser.
 
 ## Update log
-- 1.3: **Added support for Steam shortcuts**
+- 1.4: **Add "reload" button**
+- 1.3: Added support for Steam shortcuts
 - 1.2: Added help info and tutorial, refactored code.
 - 1.1: Quality-of-life tweaks and bugfixes.
 - 1.0: Initial release.
