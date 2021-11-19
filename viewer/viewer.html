@@ -30,16 +30,16 @@
       <h1>Steam Overview</h1>
     </a>
 
-    <h2 class='error' id=subtitle>
-      Where <code>Steam Overview.py</code> generates the data, SO's
-      JavaScript turns it into information. Please enable it in your browser.
+    <h2 class='error'>
+      <span id='subtitle'>
+        Where <code>Steam Overview.py</code> generates the data, SO's
+        JavaScript turns it into information. Please enable it in your browser.
+      </span>
     </h2>
-
     <p class='info'>
-      <b>Help:</b>
-      <a class='infoTabSelector' onclick="toggle('tabSteam', this)">[How do I manage Steam games?]</a>
-      <a class='infoTabSelector' onclick="toggle('tabLicense', this)">[License]</a>
-      <a onclick='startTutorial()' id=tutorialBox><b>[See tutorial]</b></a>
+      <a class='infoTabSelector' onclick="toggle('tabLicense', this)">License</a>
+      <a onclick='startTutorial()' id=tutorialBox><b>Tutorial</b></a>
+      <a class='infoTabSelector' onclick="toggle('tabSteam', this)">How to manage Steam games</a>
     </p>
 
     <div class='infoTab' id='tabSteam'>

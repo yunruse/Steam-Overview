@@ -85,8 +85,7 @@ ol, ul {
 #title > img:hover{
   transform: rotate(360deg);
 }
-
-#subtitle {
+h2 {
   font-size: 1.4em;
 }
 
@@ -99,6 +98,12 @@ ol, ul {
   position: relative;
   height: 5px;
   transition: height 0.5s;
+}
+.info a::before {
+  content: "["
+}
+.info a::after {
+  content: "]"
 }
 
 .tutorialItem .playLink {
@@ -124,6 +129,8 @@ ol, ul {
 
 #tabLicense.visible { height: 25em; }
 #tabSteam.visible { height: 4em; }
+
+/* Drive bars */
 
 .header { background-color: #333; }
 
