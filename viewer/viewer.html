@@ -1,87 +1,93 @@
-<!DOCTYPE html><html lang='en'>
+<!DOCTYPE html>
+<html lang='en'>
+
 <head>
   <title>Steam Overview</title>
-  <meta name="description" content="Steam Overview information display"/>
-  
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="description" content="Steam Overview information display" />
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="charset" content="utf-8">
-  
-  <link rel="stylesheet" href="display.css"/>
-  <link rel="shortcut icon" href="icon.png"/>
-  
+
+  <link rel="stylesheet" href="display.css" />
+  <link rel="shortcut icon" href="icon.png" />
+
   <script src="../libraries.js"></script>
-  
+
   <script src="js/polyfills.js"></script>
   <script src="js/common.js"></script>
- 
+
   <script src="js/gameSelector.js"></script>
   <script src="js/help.js"></script>
   <script src="js/library.js"></script>
-  
+
   <script src="js/interface.js"></script>
 </head>
+
 <body>
-<div class='content'>
-  <a id='title' href="https://github.com/yunruse/Steam-Overview">
-    <img src="icon.png"/>
-    <h1>Steam Overview</h1>
-  </a>
-  
-  <h2 class='error' id=subtitle>
-    Where <code>Steam Overview.py</code> generates the data, SO's
-    JavaScript turns it into information. Please enable it in your browser.
-  </h2>
-  
-  <p class='info'>
-    <b>Help:</b>
-    <a class='infoTabSelector' onclick="toggle('tabSteam', this)">[How do I manage Steam games?]</a>
-    <a class='infoTabSelector' onclick="toggle('tabLicense', this)">[License]</a>
-    <a onclick='startTutorial()' id=tutorialBox><b>[See tutorial]</b></a>
-  </p>
-  
-  <div class='infoTab' id='tabSteam'>
-    <h3>Managing games in steam</h3>
-    <p>
-    — <b>To manage game libraries</b>:
-      <i>Steam → Settings → Downloads → Steam Library Folders</i>.
-    <br/>
-    — <b>To find a game in Steam</b>:
-      <i>Mouse over and hit </i>'Details...'
-    <br/>
-    — <b>To backup, uninstall, verify, browse or move a game</b>:
-      <i>in Steam, Right click → Properties → Local Files.</i>
+  <div class='content'>
+    <a id='title' href="https://github.com/yunruse/Steam-Overview">
+      <img src="icon.png" />
+      <h1>Steam Overview</h1>
+    </a>
+
+    <h2 class='error' id=subtitle>
+      Where <code>Steam Overview.py</code> generates the data, SO's
+      JavaScript turns it into information. Please enable it in your browser.
+    </h2>
+
+    <p class='info'>
+      <b>Help:</b>
+      <a class='infoTabSelector' onclick="toggle('tabSteam', this)">[How do I manage Steam games?]</a>
+      <a class='infoTabSelector' onclick="toggle('tabLicense', this)">[License]</a>
+      <a onclick='startTutorial()' id=tutorialBox><b>[See tutorial]</b></a>
     </p>
+
+    <div class='infoTab' id='tabSteam'>
+      <h3>Managing games in steam</h3>
+      <p>
+        — <b>To manage game libraries</b>:
+        <i>Steam → Settings → Downloads → Steam Library Folders</i>.
+        <br />
+        — <b>To find a game in Steam</b>:
+        <i>Mouse over and hit </i>'Details...'
+        <br />
+        — <b>To backup, uninstall, verify, browse or move a game</b>:
+        <i>in Steam, Right click → Properties → Local Files.</i>
+      </p>
+    </div>
+
+    <div class='infoTab' id='tabLicense'>
+      <h3>Copyright (c) Mia yun Ruse 2017 – 2021.</h3>
+      <p>
+        Permission is hereby granted, free of charge, to any person and/or
+        organisation obtaining a copy of this software, associated documentation
+        files and configuration documents (henceforth the "Software"), to deal
+        in the Software without personal restriction, including without
+        limitation the rights to use, copy, modify, merge, publish and/or
+        distribute, copies of the Software, and to permit persons to whom the
+        Software is furnished to do so, subject to the following conditions:
+      </p>
+      <p>
+        The above copyright notice and this permission notice shall be included
+        in all copies or substantial portions of the Software.
+        <br />
+        All copies or substantial portions of the Software shall not be sold
+        and/or sublicensed by any person or organisation to whom the Software
+        is furnished.
+      </p>
+      <p><b>
+          The software is provided "as is", without warranty of any kind, express
+          or implied, including but not limited to the warranties of
+          merchantability, fitness for a particular purpose and noninfringement.
+          In no event shall the authors or copyright holders be liable for any
+          claim, damages or other liability, whether in an action of contract,
+          tort or otherwise, arising from, out of or in connection with the
+          software or the use or other dealings in the software.
+        </b></p>
+    </div>
+
+    <ol id=libraryList></ol>
   </div>
-  
-  <div class='infoTab' id='tabLicense'>
-    <h3>Copyright (c) Jack Dobson 2017.</h3>
-    <p>
-      Permission is hereby granted, free of  charge, to any person and/or
-      organisation obtaining a copy of this software, associated documentation
-      files and configuration documents (henceforth the "Software"), to deal
-      in the Software without personal restriction, including without
-      limitation the rights to use, copy, modify, merge, publish and/or
-      distribute, copies of the Software, and to permit persons to whom the
-      Software is furnished to do so, subject to the following conditions:
-    </p><p>
-      The above copyright notice and this permission notice shall be included
-      in all copies or substantial portions of the Software.
-      <br/>
-      All copies or substantial portions of the Software shall not be sold
-      and/or sublicensed by any person or organisation to whom the Software
-      is furnished.
-    </p><p><b>
-      The software is provided "as is", without warranty of any kind, express
-      or implied, including but not limited to the warranties of
-      merchantability, fitness for a particular purpose and noninfringement.
-      In no event shall the authors or copyright holders be liable for any
-      claim, damages or other liability, whether in an action of contract,
-      tort or otherwise, arising from, out of or in connection with the
-      software or the use or other dealings in the software.
-    </b></p>
-  </div>
-  
-  <ol id=libraryList></ol>
-</div>
 </body>
+
 </html>
