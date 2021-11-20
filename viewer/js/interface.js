@@ -1,19 +1,19 @@
 function subtitleDisplay(message, isError) {
-  
-  if( (typeof message) == 'undefined' ){
+
+  if ((typeof message) == 'undefined') {
     return;
   }
-  
+
   classBool(isError, 'error', [subtitle]);
   subtitle.innerHTML = message;
 }
 
 function formatTime(seconds) {
-  if( seconds >= 24 * 60 * 60 ){
+  if (seconds >= 24 * 60 * 60) {
     return "more than a day"
-  } else if( seconds >= 60 * 60 ){
+  } else if (seconds >= 60 * 60) {
     return roundDecimals(seconds / (60 * 60), 0) + " hours"
-  } else if( seconds >= 60 ){
+  } else if (seconds >= 60) {
     return roundDecimals(seconds / 60, 0) + " minutes"
   } else {
     return roundDecimals(seconds) + " seconds"
@@ -21,12 +21,12 @@ function formatTime(seconds) {
 }
 
 function displayTimeSince() {
-  var timeSince = (new Date().getTime() / 1000 ) - lastRetrieved
-  
-  if( timeSince >= 60){
+  var timeSince = (new Date().getTime() / 1000) - lastRetrieved
+
+  if (timeSince >= 60) {
     var timeText = "Last updated " + formatTime(timeSince) + " ago",
-        needsRerun = (timeSince >= 30 * 60);
-    if( needsRerun ){
+      needsRerun = (timeSince >= 30 * 60);
+    if (needsRerun) {
       timeText += " (please rerun <code>Steam Overview.py</code>)"
     }
     subtitleDisplay(timeText, needsRerun)
@@ -36,12 +36,12 @@ function displayTimeSince() {
   }
 }
 
-window.onload = function(){
-  try{ libraries } catch(e) {
+window.onload = function () {
+  try { libraries } catch (e) {
     subtitleDisplay("I couldn't find a libraries.js file. Did you run <code>Steam Overview.py</code>?", true);
     return;
   }
-  try{ constructLibraryList(); } catch (e) {
+  try { constructLibraryList(); } catch (e) {
     subtitleDisplay("Internal Javascript error:</br><code>" + e + "</code>", true);
     throw e;
   }

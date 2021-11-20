@@ -1,12 +1,12 @@
 /* Automatic (and manual) tutorial */
 
-toggle = function(id, caller) {
+toggle = function (id, caller) {
   var item = document.getElementById(id),
-      makeVisible = !item.classList.contains('visible'),
-      selectors = document.getElementsByClassName('infoTabSelector'),
-      tabs = document.getElementsByClassName('infoTab');
-  
-  if( makeVisible ){
+    makeVisible = !item.classList.contains('visible'),
+    selectors = document.getElementsByClassName('infoTabSelector'),
+    tabs = document.getElementsByClassName('infoTab');
+
+  if (makeVisible) {
     classBool(false, 'visible', tabs)
     classBool(false, 'hovered', selectors)
   }
@@ -16,58 +16,58 @@ toggle = function(id, caller) {
 
 var tutorialTimeStarted;
 
-setupTutorial = function(){
-  if( gameBindings.length === 0 ){ tutorialBox.classList.add('hidden'); }
+setupTutorial = function () {
+  if (gameBindings.length === 0) { tutorialBox.classList.add('hidden'); }
   var hintBindingID = Math.min(3, Math.floor(gameBindings.length / 2))
   gameBindings.tutorialShown = gameBindings[hintBindingID]
-  
+
   otherGames = []
-  for( var i = 0; i < gameBindings.length; i++ ){
-    if( i == hintBindingID ){ continue }
+  for (var i = 0; i < gameBindings.length; i++) {
+    if (i == hintBindingID) { continue }
     otherGames.push(gameBindings[i].element)
   }
   gameBindings.tutorialShadowElements = otherGames
-  
+
   tutorialTimeStarted = 0
 }
 
-startTutorial = function(){  
-  if( tutorialTimeStarted !== 0 ){
+startTutorial = function () {
+  if (tutorialTimeStarted !== 0) {
     hintInterfaceDisplay(3, tutorialTimeStarted)
     tutorialTimeStarted = 0
     return
   }
-  
+
   var lockedGame = gameBindings['locked'];
-  if( lockedGame ){
+  if (lockedGame) {
     gameBindings['locked'] = undefined;
     gameHighlight(lockedGame, false, false, true)
   }
-  
+
   var timeStarted = (new Date).valueOf();
   tutorialTimeStarted = timeStarted;
-  
+
   hintInterfaceDisplay(1, timeStarted)
-  setTimeout(function() {hintInterfaceDisplay(2, timeStarted)},  3000)
-  setTimeout(function() {hintInterfaceDisplay(3, timeStarted)},  8000)
+  setTimeout(function () { hintInterfaceDisplay(2, timeStarted) }, 3000)
+  setTimeout(function () { hintInterfaceDisplay(3, timeStarted) }, 8000)
 }
 
-hintInterfaceDisplay = function(state, timeStarted){
-  if( tutorialTimeStarted !== timeStarted ){ return; } // manually stopped
-  
+hintInterfaceDisplay = function (state, timeStarted) {
+  if (tutorialTimeStarted !== timeStarted) { return; } // manually stopped
+
   var game = gameBindings.tutorialShown,
-      pL = game.element.playLink
-  
+    pL = game.element.playLink
+
   // Shadow non-tutorial game
   classBool(state < 3, 'shadowed', gameBindings.tutorialShadowElements)
   // Make 'play link' smaller for instructional purposes
   classBool(state < 3, 'tutorialItem', [game.element])
-  
+
   var doHighlight = true,
-      doLockIn = false,
-      doDisplayPotential = true;
-  
-  switch( state ){
+    doLockIn = false,
+    doDisplayPotential = true;
+
+  switch (state) {
     case 1:
       doDisplayPotential = false
       pL.innerText = "[Mouse over to identify size]"
