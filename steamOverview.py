@@ -143,7 +143,11 @@ def _main(log):
         f.write(FORMAT.format(time.time(), _json))
 
     viewer = Path(os.getcwd()) / 'viewer' / 'viewer.html'
-    webbrowser.open_new_tab(viewer)
+    try:
+        webbrowser.open_new_tab(viewer)
+    except TypeError:
+        # Known error on macOS
+        print(f'Point your browser to: {viewer}')
 
 
 class Logger:
