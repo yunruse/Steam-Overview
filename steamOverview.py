@@ -147,28 +147,18 @@ def _main(log):
 
 
 class Logger:
-    __slots__ = 'files'.split()
-
-    def __init__(self, *files):
-        if not files:
-            files = (sys.stdout, )
-        self.files = files
+    def __init__(self, fn):
+        self.fn = fn
 
     def log(self, text='', *args, **kwargs):
         text = text.format(*args, **kwargs)
-        for f in self.files:
+        print(text)
+        with open(self.fn, 'w') as f:
             print(text, file=f)
 
 
 if __name__ == '__main__':
-    with open('log.txt', 'w', encoding='utf8') as f:
-        log = Logger(sys.stdout, f).log
-        try:
-            _main(log)
-        except Exception as e:
-            log("\n\nINTERNAL ERROR (Give this to developer!):\n{}: {}",
-                type(e).__name__, ', '.join(map(str, e.args)), prependTime=False)
-            input('The error will be logged in log.txt. Press any key to exit…')
-            raise
+    log = Logger('log.txt').log
+    _main(log)
 
     # TODO: run a teeny-tiny HTTP server to receive "reload" and "close"
