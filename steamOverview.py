@@ -170,3 +170,5 @@ if __name__ == '__main__':
                 type(e).__name__, ', '.join(map(str, e.args)), prependTime=False)
             input('The error will be logged in log.txt. Press any key to exit…')
             raise
+
+    # TODO: run a teeny-tiny HTTP server to receive "reload" and "close"
