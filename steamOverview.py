@@ -2,7 +2,7 @@
 
 '''Steam Overview main script, handling input, error handling, logging and output.'''
 
-__ver__ = '1.3'
+__ver__ = '1.4'
 
 import json
 import os
@@ -55,7 +55,7 @@ def slottableToDict(obj): return {key: getattr(obj, key)
 
 
 def _main(log):
-    log('''STEAM OVERVIEW VERSION {}\n''', __ver__)
+    log('''Steam Overview v{}\n''', __ver__)
 
     paths = _getPaths(log)
 
