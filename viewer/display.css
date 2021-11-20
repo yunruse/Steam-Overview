@@ -89,8 +89,8 @@ h2 {
   font-size: 1.4em;
 }
 
-#subtitle.error {
-  color: #f88
+.error {
+  color: #f88 !important;
 }
 
 .info {

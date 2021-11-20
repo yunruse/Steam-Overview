@@ -4,7 +4,8 @@ function subtitleDisplay(message, isError) {
     return;
   }
 
-  classBool(isError, 'error', [subtitle]);
+  classBool(false, 'error', [subtitle]);
+  classBool(isError, 'error', [btnReload]);
   subtitle.innerHTML = message;
 }
 
@@ -16,24 +17,16 @@ function formatTime(seconds) {
   } else if (seconds >= 60) {
     return roundDecimals(seconds / 60, 0) + " minutes"
   } else {
-    return roundDecimals(seconds) + " seconds"
+    return roundDecimals(seconds, 0) + " seconds"
   }
 }
 
 function displayTimeSince() {
   var timeSince = (new Date().getTime() / 1000) - lastRetrieved
 
-  if (timeSince >= 60) {
-    var timeText = "Last updated " + formatTime(timeSince) + " ago",
-      needsRerun = (timeSince >= 30 * 60);
-    if (needsRerun) {
-      timeText += " (please rerun <code>Steam Overview.py</code>)"
-    }
-    subtitleDisplay(timeText, needsRerun)
-  } else {
-    // updated in last minute, do not display
-    subtitle.classList.add('hidden')
-  }
+  var timeText = "Last updated " + formatTime(timeSince) + " ago",
+    needsRerun = (timeSince >= 30 * 60);
+  subtitleDisplay(timeText, needsRerun)
 }
 
 window.onload = function () {
